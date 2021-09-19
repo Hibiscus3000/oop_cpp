@@ -11,8 +11,15 @@ namespace util
 		}
 		return 0;
 	}
-	void cleanUp()
+	void cleanUp(ifstream& in, ofstream& out, map<string, int> * freqCounter, multimap<int,string> * wordCounter)
 	{
-
+		if (in)
+			in.close();
+		if (out)
+			out.close();
+		if (freqCounter)
+			delete freqCounter;
+		if (wordCounter)
+			delete wordCounter;
 	}
 }

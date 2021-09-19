@@ -1,6 +1,6 @@
 #include "util.h"
 
-int main(int argc, char ** argv)
+int main(int argc, char** argv)
 {
 	if (util::numOfArgCheck(argc))
 		return 1;
@@ -11,8 +11,10 @@ int main(int argc, char ** argv)
 		return 1;
 	}
 	ofstream out(argv[2]);
-	map<string,int> * freqCounter = freqCount(in, out);
-
-	util::cleanUp();
+	int numOfWords = 0, numOfDifWords = 0;
+	map<string, int>* freqCounter = freqCount(in, out, &numOfWords, &numOfDifWords);
+	multimap<int, string>* wordCounter = wordCountCreation(freqCounter);
+	wordCountList(out, numOfWords, wordCounter);
+	util::cleanUp(in,out,freqCounter,wordCounter);
 	return 0;
 }
