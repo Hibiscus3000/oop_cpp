@@ -11,5 +11,4 @@ string findNextWord(string* s);
 void addNewWordToMap(map <string, int>* freqCounter, string word, int* numOfDifWords);
 map<string, int>* freqCount(ifstream& in, ofstream& out, int* numOfWords, int* numOfDifWords);
 
-
 #endif
