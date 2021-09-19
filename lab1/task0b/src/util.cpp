@@ -11,7 +11,7 @@ namespace util
 		}
 		return 0;
 	}
-	void cleanUp(ifstream& in, ofstream& out, map<string, int> * freqCounter, multimap<int,string> * wordCounter)
+	void cleanUp(ifstream& in, ofstream& out, map<string, int>* freqCounter, multimap<int, string>* wordCounter)
 	{
 		if (in)
 			in.close();

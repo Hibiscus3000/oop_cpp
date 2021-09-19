@@ -15,6 +15,6 @@ int main(int argc, char** argv)
 	map<string, int>* freqCounter = freqCount(in, out, &numOfWords, &numOfDifWords);
 	multimap<int, string>* wordCounter = wordCountCreation(freqCounter);
 	wordCountList(out, numOfWords, wordCounter);
-	util::cleanUp(in,out,freqCounter,wordCounter);
+	util::cleanUp(in, out, freqCounter, wordCounter);
 	return 0;
 }

@@ -21,7 +21,7 @@ string findNextWord(string* s)
 	return word;
 }
 
-void addNewWordToMap(map <string, int>* freqCounter, string word, int * numOfDifWords)
+void addNewWordToMap(map <string, int>* freqCounter, string word, int* numOfDifWords)
 {
 	if (!numOfDifWords)
 		return;
@@ -29,7 +29,7 @@ void addNewWordToMap(map <string, int>* freqCounter, string word, int * numOfDif
 	freqCounter->emplace(word, 1);
 }
 
-map<string, int>* freqCount(ifstream& in, ofstream& out, int * numOfWords, int * numOfDifWords)
+map<string, int>* freqCount(ifstream& in, ofstream& out, int* numOfWords, int* numOfDifWords)
 {
 	if ((!numOfWords) || (!numOfDifWords))
 		return NULL;
