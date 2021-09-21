@@ -8,4 +8,5 @@ namespace util
 	char numOfArgCheck(int n);
 	void cleanUp(ifstream& in, ofstream& out);
 }
+
 #endif
