@@ -37,7 +37,7 @@ TEST_F(HashTableTest, ICETest)
 {
 	ASSERT_TRUE(hashTable->insert(studentName1, value1));
 	ASSERT_TRUE(hashTable->contains(studentName1));
-	ASSERT_EQ(1,hashTable->size());
+	ASSERT_EQ(1, hashTable->size());
 	ASSERT_FALSE(hashTable->insert(studentName1, value1));
 	ASSERT_TRUE(hashTable->contains(studentName1));
 	ASSERT_TRUE(hashTable->erase(studentName1));
@@ -50,11 +50,11 @@ TEST_F(HashTableTest, ICETest)
 
 TEST_F(HashTableTest, SizeTest)
 {
-	ASSERT_TRUE(hashTable->insert(studentName1,value1));
+	ASSERT_TRUE(hashTable->insert(studentName1, value1));
 	ASSERT_TRUE(hashTable->insert(studentName2, value1));
 	ASSERT_EQ(2, hashTable->size());
 	ASSERT_TRUE(hashTable->insert(studentName3, value1));
-	ASSERT_EQ(3,hashTable->size());
+	ASSERT_EQ(3, hashTable->size());
 }
 
 TEST_F(HashTableTest, AtAndCatSimpleTest)
@@ -62,7 +62,7 @@ TEST_F(HashTableTest, AtAndCatSimpleTest)
 	ASSERT_TRUE(hashTable->insert(studentName1, value1));
 	ASSERT_TRUE(hashTable->insert(studentName2, value2));
 	ASSERT_NO_THROW(student = hashTable->at(studentName1));
-	EXPECT_EQ(age1,student.age);
+	EXPECT_EQ(age1, student.age);
 	EXPECT_EQ(weight1, student.weight);
 	ASSERT_NO_THROW(student = hashTable->at(studentName2));
 	EXPECT_EQ(age2, student.age);
@@ -115,8 +115,7 @@ TEST_F(HashTableTest, ResizeTest)
 	for (c = 0; c < 255; ++c)
 	{
 		studentName.push_back(c);
-		ASSERT_TRUE(hashTable->insert(studentName,value1));
-<<<<<<< HEAD
+		ASSERT_TRUE(hashTable->insert(studentName, value1));
 	}
 	ASSERT_EQ(255, hashTable->size());
 }
@@ -129,20 +128,6 @@ TEST_F(HashTableTest, RehashTest)
 		studentName.push_back(c);
 		ASSERT_TRUE(hashTable->insert(studentName, value1));
 	}
-=======
-	}
-	ASSERT_EQ(255, hashTable->size());
-}
-
-TEST_F(HashTableTest, RehashTest)
-{
-	unsigned char c;
-	for (c = 0; c < 5; ++c)
-	{
-		studentName.push_back(c);
-		ASSERT_TRUE(hashTable->insert(studentName, value1));
-	}
->>>>>>> 3f1b6c8686584f9023e9840ad11c5b605c08305a
 	studentName.erase();
 	for (c = 0; c < 3; ++c)
 	{
@@ -153,7 +138,7 @@ TEST_F(HashTableTest, RehashTest)
 	for (c = 3; c < 5; ++c)
 	{
 		studentName.push_back(c);
-		ASSERT_FALSE(hashTable->insert(studentName,value1));
+		ASSERT_FALSE(hashTable->insert(studentName, value1));
 	}
 	studentName.erase();
 	for (c = 5; c < 255; ++c)
