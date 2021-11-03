@@ -5,15 +5,17 @@
 
 #include <string>
 
-using namespace std;
-
 struct Student
 {
 	unsigned age;
 	unsigned weight;
 };
 
-typedef string studentName;
+typedef std::string studentName;
+
+unsigned hashFunctionHorner(const studentName& name, unsigned key, unsigned bufferSize);
+unsigned hash1(const studentName& name, unsigned bufferSize);
+unsigned hash2(const studentName& name, unsigned bufferSize);
 
 class HashTable
 {
@@ -22,36 +24,45 @@ class HashTable
 
 	struct Node
 	{
-		Student value;
 		studentName key;
-		bool state;
+		Student value = {0,0};
+		bool state = true;
 	};
 
-	Node** array;
-	unsigned numOfEl;
-	unsigned bufferSize;
-	unsigned sizeAllNonNullPtr; 
+	Node** array = NULL;
+	unsigned numOfEl = 0;
+	unsigned bufferSize = 0;
+	unsigned sizeAllNonNullPtr = 0;
 
-	unsigned hashFunctionHorner(const studentName& name, unsigned key);
-	unsigned hash1(const studentName& name);
-	unsigned hash2(const studentName& name);
-	void newArrayCreation(unsigned size, Node ** newArray);
+	void newArrayCreation(unsigned oldBufferSize, unsigned bufferSize, HashTable::Node** newArray);
 	void resize();
 	void rehash();
 
 public:
-	
+
 	HashTable();
 	~HashTable();
 	HashTable(const HashTable& b);
-	HashTable(HashTable&& b);
+	HashTable(HashTable&& b) noexcept(false);
+	HashTable& operator=(const HashTable& b);
+	HashTable& operator=(HashTable&& b) noexcept(false);
 	void swap(HashTable& b);
 	void clear();
 	bool erase(const studentName& name);
 	bool insert(const studentName& name, const Student& value);
-	bool contains(const studentName& key); 
+	bool contains(const studentName& key) const; 
+	Student& operator[](const studentName& name);
+	Student& at(const studentName& name);
+	const Student& cat(const studentName& name) const;
 	size_t size() const;
 	bool empty() const;
+	
+	friend bool operator==(const HashTable& a, const HashTable& b);
+	friend bool operator!=(const HashTable& a, const HashTable& b);
+
 };
+
+bool operator==(const HashTable& a, const HashTable& b);
+bool operator!=(const HashTable& a, const HashTable& b);
 
 #endif

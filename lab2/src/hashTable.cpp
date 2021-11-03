@@ -1,34 +1,34 @@
 #include "hashTable.h"
+#include <iostream>
 
-unsigned HashTable::hashFunctionHorner(const studentName& name, unsigned key)
+unsigned hashFunctionHorner(const studentName& name, unsigned key, unsigned bufferSize)
 {
 	unsigned i, hashResult = 0, nameLength = (unsigned)(name.size());
 	for (i = 0; i < nameLength; ++i)
-		hashResult = (key * hashResult + (unsigned)(name[i])) % numOfEl;
-	hashResult = (hashResult * 2 + 1) % numOfEl;
+		hashResult = (key * hashResult + (unsigned)(name[i])) % bufferSize;
+	hashResult = (hashResult * 2 + 1) % bufferSize;
 	return hashResult;
 }
 
-unsigned HashTable::hash1(const studentName& name)
+unsigned hash1(const studentName& name, unsigned bufferSize)
 {
-	return hashFunctionHorner(name, numOfEl + 1);
+	return hashFunctionHorner(name, bufferSize + 1, bufferSize);
 }
 
-
-unsigned HashTable::hash2(const studentName& name)
+unsigned hash2(const studentName& name, unsigned bufferSize)
 {
-	return hashFunctionHorner(name, numOfEl - 1);
+	return hashFunctionHorner(name, bufferSize - 1, bufferSize);
 }
 
-void HashTable::newArrayCreation(unsigned size, Node ** newArray)
+void HashTable::newArrayCreation(unsigned oldBufferSize, unsigned bufferSize, HashTable::Node** newArray)
 {
 	numOfEl = 0;
 	sizeAllNonNullPtr = 0;
 	unsigned i;
-	for (i = 0; i < size; ++i)
+	for (i = 0; i < bufferSize; ++i)
 		newArray[i] = NULL;
 	std::swap(newArray, array);
-	for (i = 0; i < size; ++i)
+	for (i = 0; i < oldBufferSize; ++i)
 		if ((newArray[i]) && (newArray[i]->state))
 		{
 			insert(newArray[i]->key, newArray[i]->value);
@@ -41,17 +41,13 @@ void HashTable::resize()
 	unsigned oldBufferSize = bufferSize;
 	bufferSize *= 2;
 	Node** newArray = new Node * [bufferSize];
-	if (!newArray)
-		return;
-	newArrayCreation(oldBufferSize,newArray);
+	newArrayCreation(oldBufferSize,bufferSize, newArray);
 }
 
 void HashTable::rehash()
 {
 	Node** newArray = new Node * [bufferSize];
-	if (!newArray)
-		return;
-	newArrayCreation(bufferSize, newArray);
+	newArrayCreation(bufferSize,bufferSize, newArray);
 }
 
 HashTable::HashTable()
@@ -68,53 +64,88 @@ HashTable::HashTable()
 HashTable::~HashTable()
 {
 	this->clear();
-	delete array;
+	delete[] array;
 }
 
 HashTable::HashTable(const HashTable& b)
 {
+	if (((*this).array) && (b == *this))
+		return;
 	numOfEl = b.numOfEl;
 	bufferSize = b.bufferSize;
 	sizeAllNonNullPtr = b.sizeAllNonNullPtr;
 	array = new Node * [bufferSize];
 	unsigned i;
 	for (i = 0; i < bufferSize; ++i)
+	{
+		array[i] = new Node;
 		array[i] = b.array[i];
+	}
 }
 
-HashTable::HashTable(HashTable&& b)
+HashTable::HashTable(HashTable&& b) noexcept(false)
 {
+	if (((*this).array) && (&b == this))
+		return;
 	numOfEl = b.numOfEl;
 	bufferSize = b.bufferSize;
 	sizeAllNonNullPtr = b.sizeAllNonNullPtr;
 	array = b.array;
-	delete(b.array);
+	b.array = NULL;
+	b.numOfEl = b.sizeAllNonNullPtr = b.bufferSize = 0;
+}
+
+HashTable& HashTable::operator=(const HashTable& b)
+{
+	if (((*this).array) && (b == *this))
+		return *this;
+	numOfEl = b.numOfEl;
+	bufferSize = b.bufferSize;
+	sizeAllNonNullPtr = b.sizeAllNonNullPtr;
+	delete array;
+	array = new Node * [bufferSize];
+	unsigned i;
+	for (i = 0; i < bufferSize; ++i)
+	{
+		array[i] = new Node;
+		array[i] = b.array[i];
+	}
+	return *this;
+}
+
+HashTable& HashTable::operator=(HashTable&& b) noexcept(false)
+{
+	if (((*this).array) && (&b == this))
+		return *this;
+	numOfEl = b.numOfEl;
+	bufferSize = b.bufferSize;
+	sizeAllNonNullPtr = b.sizeAllNonNullPtr;
+	delete array;
+	array = b.array;
+	b.array = NULL;
+	b.numOfEl = b.bufferSize = b.sizeAllNonNullPtr = 0;
+	return *this;
 }
 
 void HashTable::swap(HashTable& b)
 {
-	unsigned tnumOfEl = numOfEl, tbufferSize = bufferSize, tsizeAllNonNullPtr = sizeAllNonNullPtr;
-	Node** tarray = array;
-	numOfEl = b.numOfEl;
-	bufferSize = b.bufferSize;
-	sizeAllNonNullPtr = b.sizeAllNonNullPtr;
-	array = b.array;
-	b.numOfEl = tnumOfEl;
-	b.bufferSize = tbufferSize;
-	b.sizeAllNonNullPtr = tsizeAllNonNullPtr;
-	b.array = tarray;
+	std::swap(numOfEl, b.numOfEl);
+	std::swap(bufferSize, b.bufferSize);
+	std::swap(sizeAllNonNullPtr, b.sizeAllNonNullPtr);
+	std::swap(array, b.array);
 }
 
 void HashTable::clear()
 {
 	unsigned i;
-	for (i = 0; i < bufferSize; i++)
-		delete(array[i]);
+	for (i = 0; i < bufferSize; ++i)
+		if (array[i])
+			delete(array[i]);
 }
 
 bool HashTable::erase(const studentName& name)
 {
-	unsigned h1 = hash1(name), h2 = hash2(name), i = 0;
+	unsigned h1 = hash1(name, bufferSize), h2 = hash2(name, bufferSize), i = 0;
 	while ((array[h1]) && (i < bufferSize))
 	{
 		if ((!array[h1]->key.compare(name)) && (array[h1]->state))
@@ -123,6 +154,7 @@ bool HashTable::erase(const studentName& name)
 			--numOfEl;
 			return true;
 		}
+		h1 = (h1 + h2) % bufferSize;
 		++i;
 	}
 	return false;
@@ -133,22 +165,23 @@ bool HashTable::insert(const studentName& name, const Student& value)
 	if (numOfEl >= rehashSize * bufferSize)
 		resize();
 	else
-		if (sizeAllNonNullPtr >= 2 * numOfEl)
+		if ((sizeAllNonNullPtr >= 2 * numOfEl) && (sizeAllNonNullPtr))
 			rehash();
-	unsigned i = 0, h1 = hash1(name), h2 = hash2(name), firstDeleted = -1;
+	unsigned i = 0, h1 = hash1(name, bufferSize), h2 = hash2(name, bufferSize);
+	bool firstDeleted = false;
 	while ((array[h1]) && (i < bufferSize))
 	{
 		if ((!array[h1]->key.compare(name)) && (array[h1]->state))
 			return false;
-		if ((!array[h1]->state) && (firstDeleted == -1))
+		if ((!array[h1]->state) && (!firstDeleted))
 		{
-			firstDeleted = h1;
+			firstDeleted = true;
 			break;
 		}
-		h1 = (h1 + h2) & bufferSize;
+		h1 = (h1 + h2) % bufferSize;
 		++i;
 	}
-	if (firstDeleted != -1)
+	if (firstDeleted)
 	{
 		array[h1]->key = name;
 		array[h1]->value = value;
@@ -166,9 +199,9 @@ bool HashTable::insert(const studentName& name, const Student& value)
 	return true;
 }
 
-bool HashTable::contains(const studentName& name)
+bool HashTable::contains(const studentName& name) const
 {
-	unsigned h1 = hash1(name), h2 = hash2(name), i = 0;
+	unsigned h1 = hash1(name, bufferSize), h2 = hash2(name, bufferSize), i = 0;
 	while ((array[h1]) && (i < bufferSize))
 	{
 		if ((!array[h1]->key.compare(name)) && (array[h1]->state))
@@ -179,14 +212,77 @@ bool HashTable::contains(const studentName& name)
 	return false;
 }
 
+Student& HashTable::operator[](const studentName& name)
+{
+	unsigned h1 = hash1(name, bufferSize), h2 = hash2(name, bufferSize), i = 0;
+	while ((array[h1]) && (i < bufferSize))
+	{
+		if ((!array[h1]->key.compare(name)) && (array[h1]->state))
+			return array[h1]->value;
+		h1 = (h1 + h2) % bufferSize;
+		++i;
+	}
+	Student value;
+	insert(name, value);
+	return (*this)[name];
+}
+
+Student& HashTable::at(const studentName& name)
+{
+	return const_cast<Student&>(cat(name));
+}
+
+const Student& HashTable::cat(const studentName& name) const
+{
+	unsigned h1 = hash1(name, bufferSize), h2 = hash2(name, bufferSize), i = 0;
+	while ((array[h1]) && (i < bufferSize))
+	{
+		if ((!array[h1]->key.compare(name)) && (array[h1]->state))
+			return array[h1]->value;
+		h1 = (h1 + h2) % bufferSize;
+		++i;
+	}
+	throw std::exception("couldn't find student with given name");
+}
+
 size_t HashTable::size() const
 {
-	return sizeAllNonNullPtr * sizeof(Node*);
+	return numOfEl;
 }
 
 bool HashTable::empty() const
 {
-	if (this->size())
-		return 1;
-	return 0;
+	if (!this->size())
+		return true;
+	return false;
+}
+
+bool operator==(const HashTable& a, const HashTable& b)
+{
+	return !(a != b);
+}
+
+bool operator!=(const HashTable& a, const HashTable& b)
+{
+	if (&a == &b)
+		return false;
+	if ((a.numOfEl != b.numOfEl) || (a.sizeAllNonNullPtr != b.sizeAllNonNullPtr))
+		return true;
+	unsigned i;
+	for (i = 0; i < a.bufferSize; ++i)
+	{
+		if (a.array[i] != b.array[i])
+			return true;
+		if (!a.array[i])
+			continue;
+		if (a.array[i]->key.compare(b.array[i]->key))
+			return true;
+		if (a.array[i]->value.weight != b.array[i]->value.weight)
+			return true;
+		if (a.array[i]->value.age != b.array[i]->value.age)
+			return true;
+		if (a.array[i]->state != b.array[i]->state)
+			return true;
+	}
+	return false;
 }
