@@ -116,6 +116,7 @@ TEST_F(HashTableTest, ResizeTest)
 	{
 		studentName.push_back(c);
 		ASSERT_TRUE(hashTable->insert(studentName,value1));
+<<<<<<< HEAD
 	}
 	ASSERT_EQ(255, hashTable->size());
 }
@@ -128,6 +129,20 @@ TEST_F(HashTableTest, RehashTest)
 		studentName.push_back(c);
 		ASSERT_TRUE(hashTable->insert(studentName, value1));
 	}
+=======
+	}
+	ASSERT_EQ(255, hashTable->size());
+}
+
+TEST_F(HashTableTest, RehashTest)
+{
+	unsigned char c;
+	for (c = 0; c < 5; ++c)
+	{
+		studentName.push_back(c);
+		ASSERT_TRUE(hashTable->insert(studentName, value1));
+	}
+>>>>>>> 3f1b6c8686584f9023e9840ad11c5b605c08305a
 	studentName.erase();
 	for (c = 0; c < 3; ++c)
 	{
