@@ -165,7 +165,7 @@ bool HashTable::insert(const studentName& name, const Student& value)
 	if (numOfEl >= rehashSize * bufferSize)
 		resize();
 	else
-		if ((sizeAllNonNullPtr >= 2 * numOfEl) && (sizeAllNonNullPtr))
+		if ((sizeAllNonNullPtr >= 2 * numOfEl) && (numOfEl))
 			rehash();
 	unsigned i = 0, h1 = hash1(name, bufferSize), h2 = hash2(name, bufferSize);
 	bool firstDeleted = false;
@@ -271,7 +271,7 @@ bool operator!=(const HashTable& a, const HashTable& b)
 	unsigned i;
 	for (i = 0; i < a.bufferSize; ++i)
 	{
-		if (a.array[i] != b.array[i])
+		if ((a.array[i] && !b.array[i]) || (!a.array[i] && b.array[i]))
 			return true;
 		if (!a.array[i])
 			continue;
