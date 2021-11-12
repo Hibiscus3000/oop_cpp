@@ -9,26 +9,31 @@
 
 using namespace std;
 
-typedef enum class BlockType
+enum class BlockType
 {
 	IN, OUT, INOUT
 };
 
+class BlockDiscription
+{
+public:
+	string blockNumber;
+	vector<string> args;
+};
+
 class Block
 {
-	virtual list<string> execute(const list<string>& text, const vector<string>& args) = 0;
-	virtual BlockType getType() = 0;
-};
-
-class BlockFactory
-{
-	BlockFactory() = default;
-
+protected:
+	BlockDiscription blockDiscription;
 public:
-	static BlockFactory& getInstance()
+	virtual list<string> execute(const list<string>& text) = 0;
+	void getBlockDiscription(string& blockNumber,const vector<string>& args);
+	virtual BlockType& getType() = 0;
+	virtual string& getName() = 0;
+	virtual ~Block()
 	{
-		static BlockFactory factory;
-		return factory;
+
 	}
 };
+
 #endif

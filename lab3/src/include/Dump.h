@@ -1,13 +1,13 @@
-#ifndef _WRITE_FILE_
-#define _WRITE_FILE_
+#ifndef  _DUMP_
+#define _DUMP_
 
 #include "Block.h"
 
-class WriteFile : public Block
+class Dump : public Block
 {
 	list<string> execute(const list<string>& text);
-	static BlockType getType();
 public:
+	static BlockType getType();
 	static string getName();
 };
 

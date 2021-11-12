@@ -4,6 +4,8 @@
 #include "WorkFlowParser.h"
 #include <iostream>
 
+using namespace std;
+
 class MyException : public exception
 {
 	string str;

@@ -1,8 +1,8 @@
 #include "WorkFlowParser.h"
 
-blocksList WorkFlowParser::getBlocks(ifstream& in)
+blockList WorkFlowParser::getBlocks(ifstream& in)
 {
-	blocksList* Blocks = new blocksList;
+	blockList blocks;
 	string block;
 	getline(in, block);
 	try
@@ -12,34 +12,59 @@ blocksList WorkFlowParser::getBlocks(ifstream& in)
 	}
 	catch (MyException& ex)
 	{
-		cout << ex.what() << endl;
+		cerr << ex.what() << endl;
 		ex.showLine();
 	}
 	getline(in, block);
-	while (!in.eof())
+	while (block.compare(endLine))
 	{
-		parseBlock(block);
+		try
+		{
+			if (in.eof())
+				throw MyException("no \"csed at the end of the block description");
+		}
+		catch (MyException& ex)
+		{
+			cerr << ex.what() << endl;
+		}
+		parseBlock(block,blocks);
 		getline(in, block);
 	}
+	return blocks;
 }
 
-void WorkFlowParser::parseBlock(string block)
+void WorkFlowParser::parseBlock(string block, blockList& blocks)
 {
-	unsigned i = block.find(' '), j;
+	int i, j;
+	string blockNumber;
+	getBlockNumber(i, block, blockNumber);
+	string blockName;
+	getBlockName(i, j, block,blockName);
+	vector<string> nameAndParams;
+	nameAndParams.push_back(blockName);
+	string param;
+	blocks.emplace_back(blockNumber, nameAndParams);
+}
+
+void WorkFlowParser::getBlockNumber(int& i, string block, string& blockNumber)
+{
+	i = block.find(' ');
 	try
 	{
 		if (i == string::npos)
-			throw MyException("number of block didn't appear in the next block discription",block);
+			throw MyException("number of block didn't appear in the next block discription", block);
 	}
 	catch (MyException& ex)
 	{
-		cout << ex.what() << endl;
+		cerr << ex.what() << endl;
 		ex.showLine();
 	}
-	char* blockNumber = new char [i];
-	int number = atoi(blockNumber);
-	string blockName;
-	i = block.find_first_not_of('= ', i);
+	blockNumber = block.substr(0, i);
+}
+
+void WorkFlowParser::getBlockName(int& i, int& j, string block, string& blockName)
+{
+	i = block.find_first_not_of("= ", i);
 	j = block.find(' ', i);
 	try
 	{
@@ -48,13 +73,14 @@ void WorkFlowParser::parseBlock(string block)
 	}
 	catch (MyException& ex)
 	{
-		cout << ex.what() << endl;
+		cerr << ex.what() << endl;
 		ex.showLine();
 	}
 	blockName.append(block, i, j - i);
-	vector<string> nameAndParams;
-	nameAndParams.push_back(blockName);
-	string param;
+}
+
+void WorkFlowParser::getBlockArgs(int& i, int& j, string block, string& param, vector<string>& nameAndParams)
+{
 	while (j != string::npos)
 	{
 		j = block.find(' ', i);
@@ -62,5 +88,20 @@ void WorkFlowParser::parseBlock(string block)
 		param.append(block, i, j - i);
 		nameAndParams.push_back(param);
 	}
-	this->blist.emplace_back(number, nameAndParams);
+}
+
+list<string> WorkFlowParser::getStructure(ifstream& in)
+{
+	list<string> structure;
+	string flow;
+	int i, j = 0;
+	while (true)
+	{
+		i = flow.find_first_not_of(" ->", j);
+		j = flow.find_first_of(" ->", i);
+		if (i == string::npos)
+			break;
+		structure.push_back(flow.substr(i,j - i));
+	}
+	return structure;
 }

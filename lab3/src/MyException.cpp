@@ -2,5 +2,5 @@
 
 void MyException::showLine()
 {
-	cout << "inappropriate line: " << str << endl;
+	cerr << "inappropriate line: " << str << endl;
 }

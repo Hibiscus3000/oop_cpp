@@ -5,8 +5,10 @@
 
 class ReadFile : public Block
 {
-	list<string> execute(const list<string>& text,const vector<string>& args) override;
-	BlockType getType();
+	list<string> execute(const list<string>& text);
+	static BlockType getType();
+public:
+	static string getName();
 };
 
 #endif 
