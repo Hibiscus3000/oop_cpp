@@ -11,12 +11,12 @@ int main()
 {
 	string workFlowFileName;
 	ifstream workFlowFile(workFlowFileName);
-	BlockMaker<ReadFile> readfile(ReadFile::getName());
-	BlockMaker<WriteFile> writefile(WriteFile::getName());
-	BlockMaker<Grep> grep(Grep::getName());
-	BlockMaker<Sort> sort(Sort::getName());
-	BlockMaker<Replace> replace(Replace::getName());
-	BlockMaker<Dump> dump(Dump::getName());
+	BlockMaker<ReadFile> readfile("readfile");
+	BlockMaker<WriteFile> writefile("writefile");
+	BlockMaker<Grep> grep("grep");
+	BlockMaker<Sort> sort("sort");
+	BlockMaker<Replace> replace("replace");
+	BlockMaker<Dump> dump("dump");
 	WorkFlowExecutor workFlow;
 	workFlow.executeWorkFlow(workFlowFile);
 	return 0;

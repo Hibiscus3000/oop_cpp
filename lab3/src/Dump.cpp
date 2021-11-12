@@ -15,9 +15,3 @@ BlockType Dump::getType()
 	static BlockType dumpType = BlockType::INOUT;
 	return dumpType;
 }
-
-string Dump::getName()
-{
-	static string dumpName = "dump";
-	return dumpName;
-}

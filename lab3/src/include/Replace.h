@@ -6,9 +6,7 @@
 class Replace : public Block
 {
 	list<string> execute(const list<string>& text);
-	static BlockType getType();
-public:
-	static string getName();
+	BlockType getType();
 };
 
 #endif

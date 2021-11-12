@@ -16,8 +16,3 @@ BlockType Grep::getType()
 {
 	return BlockType::INOUT;
 }
-
-string Grep::getName()
-{
-	return "grep";
-}

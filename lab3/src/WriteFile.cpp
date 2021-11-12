@@ -16,8 +16,3 @@ BlockType WriteFile::getType()
 {
 	return BlockType::OUT;
 }
-
-string WriteFile::getName()
-{
-	return "writefile";
-}

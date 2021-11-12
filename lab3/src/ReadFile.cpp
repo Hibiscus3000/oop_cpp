@@ -22,8 +22,3 @@ BlockType ReadFile::getType()
 {
 	return BlockType::IN;
 }
-
-string ReadFile::getName()
-{
-	return "readfile";
-}

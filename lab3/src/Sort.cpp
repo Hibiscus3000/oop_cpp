@@ -31,8 +31,3 @@ BlockType Sort::getType()
 {
 	return BlockType::INOUT;
 }
-
-string Sort::getName()
-{
-	return "sort";
-}

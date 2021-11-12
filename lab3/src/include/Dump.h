@@ -6,9 +6,7 @@
 class Dump : public Block
 {
 	list<string> execute(const list<string>& text);
-public:
-	static BlockType getType();
-	static string getName();
+	BlockType getType();
 };
 
 #endif 

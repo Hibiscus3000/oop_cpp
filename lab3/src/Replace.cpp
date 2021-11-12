@@ -28,8 +28,3 @@ BlockType Replace::getType()
 {
 	return BlockType::INOUT;
 }
-
-string Replace::getName()
-{
-	return "replace";
-}
