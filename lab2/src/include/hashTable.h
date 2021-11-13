@@ -43,9 +43,9 @@ public:
 	HashTable();
 	~HashTable();
 	HashTable(const HashTable& b);
-	HashTable(HashTable&& b) noexcept(false);
+	HashTable(HashTable&& b) noexcept;
 	HashTable& operator=(const HashTable& b);
-	HashTable& operator=(HashTable&& b) noexcept(false);
+	HashTable& operator=(HashTable&& b) noexcept;
 	void swap(HashTable& b);
 	void clear();
 	bool erase(const studentName& name);
