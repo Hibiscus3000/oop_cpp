@@ -8,7 +8,7 @@ list<string> WriteFile::execute(const list<string>& text)
 	if (!out)
 		throw MyException("couldn't find name of file or open file with given name in writefile block", *(blockDiscription.args.begin()));
 	for (auto line : text)
-		out << line;
+		out << line << endl;
 	return text;
 }
 

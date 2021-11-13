@@ -13,8 +13,9 @@ bool compare(string str1, string str2)
 			return true;
 		if (str1[i] > str2[i])
 			return false;
+		++i;
 	}
-	if (length2 > length)
+	if (length1 > length)
 		return true;
 	else
 		return false;

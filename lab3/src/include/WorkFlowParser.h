@@ -10,17 +10,17 @@
 
 using namespace std;
 
-typedef list<pair<string,vector<string>>> blockList;
+typedef list<pair<string, vector<string>>> blockList;
 
 class WorkFlowParser
 {
-	const string beginLine = "desc\n", endLine = "csed\n";
+	const string beginLine = "desc", endLine = "csed";
 	void parseBlock(string block, blockList& blocks);
 	void getBlockNumber(int& i, string block, string& blockNumber);
 	void getBlockName(int& i, int& j, string block, string& blockName);
-	void getBlockArgs(int& i, int& j, string block, string& param, vector<string>& nameAndParams);
+	void getBlockArgs(int& i, int& j, string block, vector<string>& nameAndParams);
 public:
-	blockList getBlocks(ifstream &in);
+	blockList getBlocks(ifstream& in);
 	list<string> getStructure(ifstream& in);
 };
 

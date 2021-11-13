@@ -10,7 +10,19 @@
 int main()
 {
 	string workFlowFileName;
+	cin >> workFlowFileName;
 	ifstream workFlowFile(workFlowFileName);
+	try
+	{
+		if (!workFlowFile)
+			throw MyException("couldn't open workflow file", workFlowFileName);
+	}
+	catch (MyException& ex)
+	{
+		cout << ex.what() << endl;
+		ex.showLine();
+		return 1;
+	}
 	BlockMaker<ReadFile> readfile("readfile");
 	BlockMaker<WriteFile> writefile("writefile");
 	BlockMaker<Grep> grep("grep");

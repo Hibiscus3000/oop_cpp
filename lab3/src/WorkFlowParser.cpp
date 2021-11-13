@@ -7,7 +7,7 @@ blockList WorkFlowParser::getBlocks(ifstream& in)
 	getline(in, block);
 	try
 	{
-		if (block.compare(beginLine))
+		if (block.find(beginLine) == string::npos)
 			throw MyException("no \"desc\" at the begging of the block description", block);
 	}
 	catch (MyException& ex)
@@ -16,7 +16,7 @@ blockList WorkFlowParser::getBlocks(ifstream& in)
 		ex.showLine();
 	}
 	getline(in, block);
-	while (block.compare(endLine))
+	while (block.find(endLine) == string::npos)
 	{
 		try
 		{
@@ -42,7 +42,7 @@ void WorkFlowParser::parseBlock(string block, blockList& blocks)
 	getBlockName(i, j, block,blockName);
 	vector<string> nameAndParams;
 	nameAndParams.push_back(blockName);
-	string param;
+	getBlockArgs(i, j, block, nameAndParams);
 	blocks.emplace_back(blockNumber, nameAndParams);
 }
 
@@ -79,14 +79,16 @@ void WorkFlowParser::getBlockName(int& i, int& j, string block, string& blockNam
 	blockName.append(block, i, j - i);
 }
 
-void WorkFlowParser::getBlockArgs(int& i, int& j, string block, string& param, vector<string>& nameAndParams)
+void WorkFlowParser::getBlockArgs(int& i, int& j, string block, vector<string>& nameAndParams)
 {
+	string param;
 	while (j != string::npos)
 	{
+		i = block.find_first_not_of("= ", j);
 		j = block.find(' ', i);
-		i = block.find_first_not_of("= ", i);
 		param.append(block, i, j - i);
 		nameAndParams.push_back(param);
+		param.erase();
 	}
 }
 
@@ -94,6 +96,7 @@ list<string> WorkFlowParser::getStructure(ifstream& in)
 {
 	list<string> structure;
 	string flow;
+	getline(in, flow);
 	int i, j = 0;
 	while (true)
 	{

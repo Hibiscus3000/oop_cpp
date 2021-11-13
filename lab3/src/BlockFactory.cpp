@@ -27,7 +27,7 @@ Block* BlockFactory::getBlock(blockList& blocks, string blockNumber)
 		throw MyException("Unrecognized block type", *blockDiscription.second.begin());
 	IBlockMaker* maker = it->second;
 	Block * block = maker->getBlock();
-	blockDiscription.second.begin()->erase();
+	blockDiscription.second.erase(blockDiscription.second.begin());
 	block->getBlockDiscription(blockDiscription.first, blockDiscription.second);
 	return block;
 }

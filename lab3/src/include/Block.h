@@ -27,7 +27,7 @@ protected:
 	BlockDiscription blockDiscription;
 public:
 	virtual list<string> execute(const list<string>& text) = 0;
-	void getBlockDiscription(string& blockNumber,const vector<string>& args);
+	void getBlockDiscription(const string& blockNumber,const vector<string>& args);
 	virtual BlockType getType() = 0;
 	virtual ~Block()
 	{

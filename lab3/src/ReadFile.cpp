@@ -4,7 +4,7 @@ list<string> ReadFile::execute(const list<string>& text)
 {
 	if (blockDiscription.args.size() < 1)
 		throw MyException("wrong number of arguments in readfile block");
-	ifstream in(*(blockDiscription.args.begin()));
+	ifstream in(*blockDiscription.args.begin());
 	if (!in)
 		throw MyException("couldn't find name of file or open file with given name in readfile block", *(blockDiscription.args.begin()));
 	list<string> newText;
