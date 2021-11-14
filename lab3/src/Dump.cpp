@@ -6,7 +6,7 @@ list<string> Dump::execute(const list<string>& text)
 		throw MyException("wrong number of arguments in dump block");
 	ofstream out(*blockDiscription.args.begin());
 	for (auto line : text)
-		out << line;
+		out << line << endl;
 	return text;
 }
 

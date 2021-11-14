@@ -21,19 +21,8 @@ void WorkFlowExecutor::executeWorkFlow(ifstream& in)
 		cerr << ex.what() << endl;
 	}
 
-	list<string> text;
-	for (auto blockObject : blockObjects)
-	{
-		try
-		{
-			text = blockObject->execute(text);
-		}
-		catch (MyException& ex)
-		{
-			cerr << ex.what() << endl;
-			ex.showLine();
-		}
-	}
+	executeBlocks(blockObjects);
+	deleteBlocks(blockObjects);
 }
 
 void WorkFlowExecutor::blockCheck(list<Block*> blockObjects)
@@ -51,4 +40,28 @@ void WorkFlowExecutor::blockCheck(list<Block*> blockObjects)
 	if ((*listEndIt)->getType() != BlockType::OUT)
 		throw MyException("no writefile block at the end of the block structure");
 
+}
+
+void WorkFlowExecutor::executeBlocks(list<Block*> blockObjects)
+{
+	list<string> text;
+	for (auto blockObject : blockObjects)
+	{
+		try
+		{
+			text = blockObject->execute(text);
+		}
+		catch (MyException& ex)
+		{
+			cerr << ex.what() << endl;
+			ex.showLine();
+		}
+	}
+}
+
+void WorkFlowExecutor::deleteBlocks(list<Block*> blockOjects)
+{
+	for (auto blockObject : blockOjects)
+		if (blockObject)
+			delete(blockObject);
 }
