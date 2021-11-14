@@ -1,0 +1,9 @@
+desc 
+1 = readfile in_file.txt
+2 = writefile out_file.txt
+3 = sort
+1110001111 = dump t_file.txt
+10 =  replace in IN
+11 = replace the THEEEEE
+csed
+1 -> 10 -> 3 -> 1110001111 -> 11 -> 3 -> 2
