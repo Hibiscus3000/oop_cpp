@@ -16,20 +16,20 @@ int main()
 	{
 		if (!workFlowFile)
 			throw MyException("couldn't open workflow file", workFlowFileName);
+		BlockMaker<ReadFile> readfile("readfile");
+		BlockMaker<WriteFile> writefile("writefile");
+		BlockMaker<Grep> grep("grep");
+		BlockMaker<Sort> sort("sort");
+		BlockMaker<Replace> replace("replace");
+		BlockMaker<Dump> dump("dump");
+		WorkFlowExecutor workFlow;
+		workFlow.executeWorkFlow(workFlowFile);
 	}
 	catch (MyException& ex)
 	{
-		cout << ex.what() << endl;
+		cerr << ex.what() << endl;
 		ex.showLine();
 		return 1;
 	}
-	BlockMaker<ReadFile> readfile("readfile");
-	BlockMaker<WriteFile> writefile("writefile");
-	BlockMaker<Grep> grep("grep");
-	BlockMaker<Sort> sort("sort");
-	BlockMaker<Replace> replace("replace");
-	BlockMaker<Dump> dump("dump");
-	WorkFlowExecutor workFlow;
-	workFlow.executeWorkFlow(workFlowFile);
 	return 0;
 }

@@ -8,8 +8,18 @@ void WorkFlowExecutor::executeWorkFlow(ifstream& in)
 	list<Block*> blockObjects;
 	for (auto blockNumber : structure)
 	{
-		Block* blockObject = BlockFactory::getInstance().getBlock(blocks, blockNumber);
-		blockObjects.push_back(blockObject);
+		try
+		{
+			Block* blockObject = BlockFactory::getInstance().getBlock(blocks, blockNumber);
+			blockObjects.push_back(blockObject);
+		}
+		catch (MyException& ex)
+		{
+			cerr << ex.what() << endl;
+			ex.showLine();
+			deleteBlocks(blockObjects);
+			return;
+		}
 	}
 
 	try
@@ -19,6 +29,8 @@ void WorkFlowExecutor::executeWorkFlow(ifstream& in)
 	catch (MyException& ex)
 	{
 		cerr << ex.what() << endl;
+		deleteBlocks(blockObjects);
+		return;
 	}
 
 	executeBlocks(blockObjects);
