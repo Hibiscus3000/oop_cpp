@@ -7,21 +7,21 @@
 #include <string>
 #include <list>
 #include <fstream>
+#include <map>
 
 using namespace std;
 
-typedef list<pair<string, vector<string>>> blockList;
+typedef map<string, vector<string>> blockMap;
 
 class WorkFlowParser
 {
 	const string beginLine = "desc", endLine = "csed";
-	void parseBlock(string block, blockList& blocks);
+	void parseBlock(string block, blockMap& blocks);
 	void getBlockNumber(int& i, string block, string& blockNumber);
-	void getBlockName(int& i, int& j, string block, string& blockName);
-	void getBlockArgs(int& i, int& j, string block, vector<string>& nameAndParams);
+	void getBlockName(int& i, int& j, string& block, string& blockName);
+	void getBlockArgs(int& i, int& j, string& block, vector<string>& nameAndParams);
 public:
-	blockList getBlocks(ifstream& in);
-	list<string> getStructure(ifstream& in);
+	blockMap getBlocks(ifstream& in);
 };
 
 #endif 

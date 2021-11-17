@@ -2,10 +2,10 @@
 
 list<string> Replace::execute(const list<string>& text)
 {
-	if (blockDiscription.args.size() < 2)
+	if (args.size() < 2)
 		throw MyException("wrong number of arguments in replace block");
 	list<string> newText;
-	auto it = blockDiscription.args.begin();
+	auto it = args.begin();
 	string word1 = *it;
 	word1.insert(0, 1, ' ');
 	word1.push_back(' ');

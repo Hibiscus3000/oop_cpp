@@ -3,41 +3,14 @@
 void WorkFlowExecutor::executeWorkFlow(ifstream& in)
 {
 	WorkFlowParser parser;
-	blockList blocks = parser.getBlocks(in);
-	list<string> structure = parser.getStructure(in);
 	list<Block*> blockObjects;
-	for (auto blockNumber : structure)
-	{
-		try
-		{
-			Block* blockObject = BlockFactory::getInstance().getBlock(blocks, blockNumber);
-			blockObjects.push_back(blockObject);
-		}
-		catch (MyException& ex)
-		{
-			cerr << ex.what() << endl;
-			ex.showLine();
-			deleteBlocks(blockObjects);
-			return;
-		}
-	}
-
-	try
-	{
-		blockCheck(blockObjects);
-	}
-	catch (MyException& ex)
-	{
-		cerr << ex.what() << endl;
-		deleteBlocks(blockObjects);
-		return;
-	}
-
+	blockMap blocks = parser.getBlocks(in);
+	createBlockObjects(blocks, blockObjects, in);
+	blockCheck(blockObjects);
 	executeBlocks(blockObjects);
-	deleteBlocks(blockObjects);
 }
 
-void WorkFlowExecutor::blockCheck(list<Block*> blockObjects)
+void WorkFlowExecutor::blockCheck(list<Block*>& blockObjects)
 {
 	auto it = blockObjects.begin(), listEndIt = --blockObjects.end();
 	if ((*it)->getType() != BlockType::IN)
@@ -54,26 +27,35 @@ void WorkFlowExecutor::blockCheck(list<Block*> blockObjects)
 
 }
 
-void WorkFlowExecutor::executeBlocks(list<Block*> blockObjects)
+void WorkFlowExecutor::executeBlocks(list<Block*>& blockObjects)
 {
 	list<string> text;
 	for (auto blockObject : blockObjects)
 	{
-		try
-		{
-			text = blockObject->execute(text);
-		}
-		catch (MyException& ex)
-		{
-			cerr << ex.what() << endl;
-			ex.showLine();
-		}
+		text = blockObject->execute(text);
 	}
 }
 
-void WorkFlowExecutor::deleteBlocks(list<Block*> blockOjects)
+void WorkFlowExecutor::createBlockObjects(blockMap& blocks, list<Block*> blockObjects, ifstream& in)
 {
-	for (auto blockObject : blockOjects)
-		if (blockObject)
-			delete(blockObject);
+	string flow;
+	getline(in, flow);
+	int i, j = 0;
+	string blockNumber, blockName;
+	while (true)
+	{
+		i = flow.find_first_not_of(" ->", j);
+		j = flow.find_first_of(" ->", i);
+		if (i == string::npos)
+			break;
+		blockNumber = flow.substr(i, j - i);
+		auto it = blocks.find(blockNumber);
+		if (it == blocks.end())
+			throw MyException("Unrecognized block number", blockNumber);
+		blockName = *it->second.begin();
+		it->second.erase(it->second.begin());
+		Block* blockObject = BlockFactory::getInstance().getBlock(blockName);
+		blockObject->setBlockArgs(it->second);
+		blockObjects.push_back(blockObject);
+	}
 }

@@ -6,9 +6,9 @@
 
 class WorkFlowExecutor
 {
-	void blockCheck(list<Block*> blockObjects);
-	void executeBlocks(list<Block*> blockObjects);
-	void deleteBlocks(list<Block*> blockObjects);
+	void blockCheck(list<Block*>& blockObjects);
+	void executeBlocks(list<Block*>& blockObjects);
+	void createBlockObjects(blockMap& blocks, list<Block*> blockObjects, ifstream& in);
 public:
 	void executeWorkFlow(ifstream& in);
 };

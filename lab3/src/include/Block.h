@@ -14,20 +14,13 @@ enum class BlockType
 	IN, OUT, INOUT
 };
 
-class BlockDiscription
-{
-public:
-	string blockNumber;
-	vector<string> args;
-};
-
 class Block
 {
 protected:
-	BlockDiscription blockDiscription;
+	vector<string> args;
 public:
 	virtual list<string> execute(const list<string>& text) = 0;
-	void getBlockDiscription(const string& blockNumber,const vector<string>& args);
+	void setBlockArgs(const vector<string>& args);
 	virtual BlockType getType() = 0;
 	virtual ~Block()
 	{

@@ -13,7 +13,7 @@ class BlockFactory
 
 public:
 	static BlockFactory& getInstance();
-	Block* getBlock(blockList& blocks, string blockNumber);
+	Block* getBlock(string blockName);
 	void RegisterMaker(const string& key, IBlockMaker* maker);
 };
 

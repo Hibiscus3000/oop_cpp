@@ -13,21 +13,10 @@ BlockFactory& BlockFactory::getInstance()
 	return factory;
 }
 
-Block* BlockFactory::getBlock(blockList& blocks, string blockNumber)
+Block* BlockFactory::getBlock(string blockName)
 {
-	pair<string,vector<string>> blockDiscription;
-	for (auto block : blocks)
-		if (!block.first.compare(blockNumber))
-		{
-			blockDiscription = block;
-			break;
-		}
-	auto it = _makers.find(*blockDiscription.second.begin());
+	auto it = _makers.find(blockName);
 	if (it == _makers.end())
-		throw MyException("Unrecognized block type", *blockDiscription.second.begin());
-	IBlockMaker* maker = it->second;
-	Block * block = maker->getBlock();
-	blockDiscription.second.erase(blockDiscription.second.begin());
-	block->getBlockDiscription(blockDiscription.first, blockDiscription.second);
-	return block;
+		throw MyException("Unrecognized block type", blockName);
+	return it->second->getBlock();
 }
