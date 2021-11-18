@@ -3,16 +3,17 @@
 void WorkFlowExecutor::executeWorkFlow(ifstream& in)
 {
 	WorkFlowParser parser;
-	list<Block*> blockObjects;
+	list<shared_ptr<Block>> blockObjects;
 	blockMap blocks = parser.getBlocks(in);
 	createBlockObjects(blocks, blockObjects, in);
 	blockCheck(blockObjects);
 	executeBlocks(blockObjects);
 }
 
-void WorkFlowExecutor::blockCheck(list<Block*>& blockObjects)
+void WorkFlowExecutor::blockCheck(const list<shared_ptr<Block>>& blockObjects) const
 {
-	auto it = blockObjects.begin(), listEndIt = --blockObjects.end();
+	auto it = blockObjects.cbegin();
+	auto listEndIt = --blockObjects.cend();
 	if ((*it)->getType() != BlockType::IN)
 		throw MyException("no readfile block at the begging of the block structure");
 	++it;
@@ -24,10 +25,9 @@ void WorkFlowExecutor::blockCheck(list<Block*>& blockObjects)
 	}
 	if ((*listEndIt)->getType() != BlockType::OUT)
 		throw MyException("no writefile block at the end of the block structure");
-
 }
 
-void WorkFlowExecutor::executeBlocks(list<Block*>& blockObjects)
+void WorkFlowExecutor::executeBlocks(list<shared_ptr<Block>>& blockObjects)
 {
 	list<string> text;
 	for (auto blockObject : blockObjects)
@@ -36,7 +36,7 @@ void WorkFlowExecutor::executeBlocks(list<Block*>& blockObjects)
 	}
 }
 
-void WorkFlowExecutor::createBlockObjects(blockMap& blocks, list<Block*> blockObjects, ifstream& in)
+void WorkFlowExecutor::createBlockObjects(blockMap& blocks, list<shared_ptr<Block>>& blockObjects, ifstream& in)
 {
 	string flow;
 	getline(in, flow);
@@ -53,8 +53,7 @@ void WorkFlowExecutor::createBlockObjects(blockMap& blocks, list<Block*> blockOb
 		if (it == blocks.end())
 			throw MyException("Unrecognized block number", blockNumber);
 		blockName = *it->second.begin();
-		it->second.erase(it->second.begin());
-		Block* blockObject = BlockFactory::getInstance().getBlock(blockName);
+		shared_ptr<Block> blockObject(BlockFactory::getInstance().getBlock(blockName));
 		blockObject->setBlockArgs(it->second);
 		blockObjects.push_back(blockObject);
 	}

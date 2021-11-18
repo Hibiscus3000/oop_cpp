@@ -12,7 +12,7 @@ public:
 	{
 		BlockFactory::getInstance().RegisterMaker(key, this);
 	}
-	virtual Block * getBlock() const
+	virtual Block* getBlock() const
 	{
 		return new T;
 	}
