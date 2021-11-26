@@ -69,8 +69,6 @@ HashTable::~HashTable()
 
 HashTable::HashTable(const HashTable& b)
 {
-	if (((*this).array) && (b == *this))
-		return;
 	numOfEl = b.numOfEl;
 	bufferSize = b.bufferSize;
 	sizeAllNonNullPtr = b.sizeAllNonNullPtr;
@@ -83,10 +81,8 @@ HashTable::HashTable(const HashTable& b)
 	}
 }
 
-HashTable::HashTable(HashTable&& b) noexcept(false)
+HashTable::HashTable(HashTable&& b) noexcept
 {
-	if (((*this).array) && (&b == this))
-		return;
 	numOfEl = b.numOfEl;
 	bufferSize = b.bufferSize;
 	sizeAllNonNullPtr = b.sizeAllNonNullPtr;
@@ -97,7 +93,7 @@ HashTable::HashTable(HashTable&& b) noexcept(false)
 
 HashTable& HashTable::operator=(const HashTable& b)
 {
-	if (((*this).array) && (b == *this))
+	if (&b == this)
 		return *this;
 	numOfEl = b.numOfEl;
 	bufferSize = b.bufferSize;
@@ -113,9 +109,9 @@ HashTable& HashTable::operator=(const HashTable& b)
 	return *this;
 }
 
-HashTable& HashTable::operator=(HashTable&& b) noexcept(false)
+HashTable& HashTable::operator=(HashTable&& b) noexcept
 {
-	if (((*this).array) && (&b == this))
+	if (&b == this)
 		return *this;
 	numOfEl = b.numOfEl;
 	bufferSize = b.bufferSize;

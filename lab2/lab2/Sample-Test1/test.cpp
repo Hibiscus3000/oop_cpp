@@ -197,6 +197,14 @@ TEST_F(HashTableTest, AssignmentOperatorandEqualityTest)
 	EXPECT_FALSE(*hashTable != hashTable2);
 }
 
+TEST_F(HashTableTest, AssignToItselfTest)
+{
+	hashTable->insert(studentName1, value1);
+	*hashTable = *hashTable;
+	EXPECT_TRUE(hashTable->contains(studentName1));
+	EXPECT_TRUE(hashTable->size());
+}
+
 TEST_F(HashTableTest, MoveConstructorTest)
 {
 	hashTable->insert(studentName1, value1);
@@ -214,6 +222,14 @@ TEST_F(HashTableTest, MoveAssignmentOperatorTest)
 	ASSERT_TRUE(hashTable2.size());
 	ASSERT_TRUE(hashTable->empty());
 	ASSERT_TRUE(hashTable2.contains(studentName1));
+}
+
+TEST_F(HashTableTest, MoveAssignToItselfTest)
+{
+	hashTable->insert(studentName1, value1);
+	*hashTable = std::move(*hashTable);
+	EXPECT_TRUE(hashTable->contains(studentName1));
+	EXPECT_TRUE(hashTable->size());
 }
 
 TEST_F(HashTableTest, SwapTest)
