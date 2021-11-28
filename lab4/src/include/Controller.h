@@ -12,8 +12,9 @@ class Controller
 	void setWordLength(unsigned wordLength);
 	void setSecretWord(string secretWord, string& secretWordN);
 	void setTryWord(string tryWord);
-	void preGameSettings();
 	void play();
+	void playWithBot();
+	void playWithHuman();
 };
 
 #endif

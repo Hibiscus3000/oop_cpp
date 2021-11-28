@@ -7,7 +7,11 @@ using namespace std;
 
 class View
 {
-	void gameMode();
+public:
+	string selectGameMode();
+	string selectDifficulty();
+	string selectPlayerName(char playerNumber);
+	string selectSecretWord(string playerName, unsigned wordLength);
 };
 
 #endif 

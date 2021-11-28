@@ -8,7 +8,14 @@ using namespace std;
 class Player
 {
 protected:
-	string playerName, secretWord;
+	string Name, secretWord;
+
+public:
+	virtual ~Player()
+	{
+
+	}
+
 };
 
 #endif

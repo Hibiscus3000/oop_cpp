@@ -21,13 +21,25 @@ void Controller::setTryWord(string tryWord)
 	model.tryWord = tryWord;
 }
 
-void Controller::preGameSettings()
+void Controller::playWithBot()
 {
-	view.
+
+}
+
+void Controller::playWithBot()
+{
+
 }
 
 void Controller::play()
 {
-	preGameSettings();
+	string gameMode = view.selectGameMode();
+	if (!gameMode.compare("pvp"))
+		playWithBot();
+	if (!gameMode.compare("pvc"))
+		playWithHuman();
+	if (gameMode.compare("pvp") && gameMode.compare("pvc"))
+		throw UnrecognizedGameSettings("Unrecognised game mode:",gameMode);
+
 }
 
