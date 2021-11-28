@@ -1,31 +1,12 @@
 #include "Model.h"
 
-void Model::setWordLength(unsigned wordLength)
-{
-	this->wordLength = wordLength;
-}
-
-void Model::setSecretWord(string secretWord)
-{
-	if (secretWord.length() != wordLength)
-
-	this->secretWord = secretWord;
-}
-
-void Model::setTryWord(string tryWord)
-{
-	if (tryWord.length() != wordLength)
-
-	this->tryWord = tryWord;
-}
-
-void Model::searchForBulls(unsigned& wordLengthCp, string& secretWordCp)
+void Model::searchForBulls(unsigned& wordLengthCp, string& secretWordN, string& secretWordCp)
 {
 	bulls = 0;
 	unsigned i;
 	string tryWordCp = tryWord;
 	for (i = 0; i < wordLength; ++i)
-		if (secretWord[i] == tryWord[i])
+		if (secretWordN[i] == tryWord[i])
 		{
 			++bulls;
 			tryWordCp.erase(i, 1);
@@ -50,10 +31,10 @@ void Model::searchForCows(unsigned& wordLengthCp, string& secretWordCp)
 			}
 }
 
-void Model::getBullAndCowsNumber()
+void Model::getBullAndCowsNumber(string& secretWordN)
 {
-	string secretWordCp = secretWord;
+	string secretWordCp = secretWordN;
 	unsigned wordLengthCp = wordLength;
-	this->searchForBulls(wordLengthCp, secretWordCp);
+	this->searchForBulls(wordLengthCp, secretWordN, secretWordCp);
 	this->searchForCows(wordLengthCp, secretWordCp);
 }
