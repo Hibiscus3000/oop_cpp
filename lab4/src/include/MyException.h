@@ -8,8 +8,18 @@ using namespace std;
 
 class MyException
 {
+protected:
+	string error;
 public:
-	virtual void errorReport() const noexcept = 0;
+	MyException() = default;
+	MyException(const string & error)
+	{
+		this->error = error;
+	}
+	virtual void errorReport() const noexcept
+	{
+		cout << error << endl;
+	}
 	virtual ~MyException()
 	{
 

@@ -1,9 +1,18 @@
 #include "Model.h"
 
-void Model::makeTurn(string tryWord, Player& player)
+Model::Model(unsigned numberOfPlayers)
+{
+	unsigned i;
+	for (i = 0; i < numberOfPlayers; ++i)
+	{
+		shared_ptr<Player> player(new Player);
+		players[i] = player; 
+	}
+}
+
+void Model::makeTurn(Player& player)
 {
 	++(player.turnNumber);
-	this->tryWord = tryWord;
 	countBullsAndCowsNumber(player.secretWord);
 	if (this->bulls == wordLength)
 		player.victory = true;

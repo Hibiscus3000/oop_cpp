@@ -1,11 +1,11 @@
 #include "View.h"
 
-string View::selectGameMode()
+unsigned View::selectNumberOfPlayers()
 {
-	string gameMode;
-	cout << "Please select game mode: pvp or pvc: ";
-	cin >> gameMode;
-	return gameMode;
+	unsigned numberOfPlayers;
+	cout << "Please select number of players: ";
+	cin >> numberOfPlayers;
+	return numberOfPlayers;
 }
 
 unsigned View::selectWordLength()
@@ -21,25 +21,25 @@ string View::selectDifficulty()
 	string difficulty;
 	cout << "Please select difficulty: easy, medium, hard: ";
 	cin >> difficulty;
-	fflush(stdout);
+	system("cls");
 	return difficulty;
 }
 
-string View::selectPlayerName(char playerNumber)
+string View::selectPlayerName(unsigned playerNumber)
 {
 	string name;
 	cout << "Player" << playerNumber << " please enter your name: ";
 	cin >> name;
-	fflush(stdout);
+	system("cls");
 	return name;
 }
 
-string View::selectSecretWord(const string& playerName, unsigned wordLength)
+string View::selectSecretWord(const string& fromPlayerName, const string& forPlayerName, unsigned wordLength)
 {
 	string secretWord;
-	cout << playerName << ", please enter your " << wordLength << " symbols secret word: ";
+	cout << fromPlayerName << ", please enter your " << wordLength << " symbols secret word for " << forPlayerName << ": ";
 	cin >> secretWord;
-	fflush(stdout);
+	system("cls");
 	return secretWord;
 }
 

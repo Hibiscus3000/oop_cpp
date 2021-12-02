@@ -1,12 +1,11 @@
 #include "Controller.h"
-#include "PlayerCreator.h"
+#include "BotCreator.h"
 #include "MyException.h"
 
 int main()
 {
 	try
 	{
-		PlayerCreator<Human> human("human");
 		Controller controller;
 		controller.play();
 	}

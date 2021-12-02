@@ -7,7 +7,7 @@ class ControllerException : public MyException
 {
 protected:
 	string error;
-	string unrecognizedGameSettings;
+	string unrecognizedDifficulty;
 	string wordType;
 	string wrongWord;
 	unsigned wordLength;
@@ -16,7 +16,7 @@ protected:
 class inappropriateWord: public ControllerException
 {
 public:
-	inappropriateWord(string wordType, string wrongWord, unsigned wordLength)
+	inappropriateWord(const string& wordType, const string& wrongWord, unsigned wordLength)
 	{
 		this->wordLength = wordLength;
 		this->wordType = wordType;
@@ -24,7 +24,7 @@ public:
 	}
 	void errorReport() const noexcept
 	{
-		cerr << "Wrong word length in given " << wordType << ": " << wrongWord << "\nWord length expected:" << wordLength << endl;
+		cerr << "Wrong word length in given " << wordType << ": " << wrongWord << "\nWord length expected: " << wordLength << endl;
 	}
 };
 
@@ -37,21 +37,7 @@ public:
 	}
 	void errorReport() const noexcept
 	{
-		cerr << "Word length shouldn't be equal to the given number: " << wordLength << endl;
-	}
-};
-
-class UnrecognizedGameSettings : public ControllerException
-{
-public:
-	UnrecognizedGameSettings(string error, string unrecognizedGameSettings)
-	{
-		this->error = error;
-		this->unrecognizedGameSettings = unrecognizedGameSettings;
-	}
-	void errorReport() const noexcept
-	{
-		cerr << error << ' ' << unrecognizedGameSettings << endl;
+		cerr << "Word length shouldn`t be equal to the given number: " << wordLength << endl;
 	}
 };
 

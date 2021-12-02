@@ -5,16 +5,15 @@
 
 class FactoryException : public MyException
 {
-	string errorType;
-	string playerType;
+	string difficulty;
 public:
-	FactoryException(string errorType, string playerType) : errorType(errorType), playerType(playerType)
+	FactoryException(const string& error,const string& difficulty) : difficulty(difficulty)
 	{
-
+		this->error = error;
 	}
 	void errorReport() const noexcept
 	{
-		cout << errorType << ' ' << playerType << endl;
+		cout << error << ' ' << difficulty << endl;
 	}
 };
 

@@ -3,15 +3,18 @@
 
 #include "Player.h"
 #include <memory>
+#include <map>
 
 class Model
 {
 public:
 	unsigned wordLength, cows, bulls;
-	shared_ptr<Player> player1, player2;
-	void makeTurn(string tryWord, Player& player);
-private:
+	map<unsigned,shared_ptr<Player>> players;
 	string tryWord;
+	void makeTurn(Player& player);
+	Model() = default;
+	Model(unsigned numberOfPlayers);
+private:
 	void searchForCows(unsigned& wordLengthCp, string& secretWordCp);
 	void searchForBulls(unsigned& wordLengthCp, string& secretWordN, string& secretWordCp);
 	void countBullsAndCowsNumber(string& secretWordN);
