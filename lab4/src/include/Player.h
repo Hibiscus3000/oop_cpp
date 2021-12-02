@@ -7,15 +7,14 @@ using namespace std;
 
 class Player
 {
-protected:
-	string Name, secretWord;
-
 public:
+	string name, secretWord;
+	bool victory = false;
+	unsigned turnNumber = 0;
 	virtual ~Player()
 	{
 
 	}
-
 };
 
 #endif

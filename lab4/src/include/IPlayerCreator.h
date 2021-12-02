@@ -6,11 +6,11 @@
 class IPlayerCreator
 {
 public:
-	virtual Player * getPlayer() const = 0;
+	virtual Player* getPlayer() const = 0;
 	virtual ~IPlayerCreator()
 	{
 
 	}
-}
+};
 
 #endif

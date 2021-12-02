@@ -7,9 +7,10 @@
 template<typename T>
 class PlayerCreator : public IPlayerCreator
 {
-	PlayCreator(string playerType)
+public:
+	PlayerCreator(const string& playerType)
 	{
-		PlayerFactory::getInstance().registerCreator(playerType);
+		PlayerFactory::getInstance().registerCreator(playerType, this);
 	}
 	Player* getPlayer() const
 	{

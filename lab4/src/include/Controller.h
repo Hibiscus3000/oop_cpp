@@ -4,17 +4,20 @@
 #include "Model.h"
 #include "View.h"
 #include "ControllerException.h"
+#include "PlayerFactory.h"
+#include "Human.h"
 
 class Controller
 {
 	Model model;
 	View view;
-	void setWordLength(unsigned wordLength);
-	void setSecretWord(string secretWord, string& secretWordN);
-	void setTryWord(string tryWord);
-	void play();
+	void setWordLength();
+	string getWord(const string& playerName, const string wordType);
 	void playWithBot();
 	void playWithHuman();
+	void preGameSettings();
+public:
+	void play();
 };
 
 #endif

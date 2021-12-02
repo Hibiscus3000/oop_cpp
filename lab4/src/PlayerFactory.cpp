@@ -1,12 +1,12 @@
 #include "PlayerFactory.h"
 
-PlayerFactory& PlayerFactory::getInstanse()
+PlayerFactory& PlayerFactory::getInstance()
 {
 	static PlayerFactory factory;
 	return factory;
 }
 
-void PlayerFactory::registerCreator(string playerType, IPlayerCreator* creator)
+void PlayerFactory::registerCreator(const string& playerType, IPlayerCreator* creator)
 {
 	if (creators.find(playerType) != creators.end())
 		throw FactoryException("Multiply creators for given playerType", playerType);

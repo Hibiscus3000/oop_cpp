@@ -13,8 +13,8 @@ class PlayerFactory
 	PlayerFactory() = default;
 
 public:
-	static PlayerFactory& getInstanse();
-	void registerCreator(string playerType, IPlayerCreator* creator);
+	static PlayerFactory& getInstance();
+	void registerCreator(const string& playerType, IPlayerCreator* creator);
 	Player* getPlayer(string playerType) const;
 };
 
