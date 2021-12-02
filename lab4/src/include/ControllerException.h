@@ -3,41 +3,20 @@
 
 #include "MyException.h"
 
-class ControllerException : public MyException
+class InappropriateLength : public MyException
 {
-protected:
-	string error;
-	string unrecognizedDifficulty;
-	string wordType;
-	string wrongWord;
-	unsigned wordLength;
-};
-
-class inappropriateWord: public ControllerException
-{
+	unsigned wordLength, minWordLength, maxWordLength;
 public:
-	inappropriateWord(const string& wordType, const string& wrongWord, unsigned wordLength)
+	InappropriateLength(unsigned wordLength, unsigned minWordLength, unsigned maxWordLength)
 	{
 		this->wordLength = wordLength;
-		this->wordType = wordType;
-		this->wrongWord = wrongWord;
+		this->minWordLength = minWordLength;
+		this->maxWordLength = maxWordLength;
 	}
 	void errorReport() const noexcept
 	{
-		cerr << "Wrong word length in given " << wordType << ": " << wrongWord << "\nWord length expected: " << wordLength << endl;
-	}
-};
-
-class inappropriateLength : public ControllerException
-{
-public:
-	inappropriateLength(unsigned wordLength)
-	{
-		this->wordLength = wordLength;
-	}
-	void errorReport() const noexcept
-	{
-		cerr << "Word length shouldn`t be equal to the given number: " << wordLength << endl;
+		cerr << "Word length should vary from " << minWordLength << " to " << maxWordLength << endl;
+		cerr << "Word length given: " << wordLength << endl;
 	}
 };
 

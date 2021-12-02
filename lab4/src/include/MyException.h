@@ -18,7 +18,7 @@ public:
 	}
 	virtual void errorReport() const noexcept
 	{
-		cout << error << endl;
+		cerr << error << endl;
 	}
 	virtual ~MyException()
 	{

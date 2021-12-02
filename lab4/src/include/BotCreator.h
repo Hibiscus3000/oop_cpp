@@ -12,7 +12,7 @@ public:
 	{
 		BotFactory::getInstance().registerCreator(difficulty, this);
 	}
-	Player* getPlayer() const
+	Bot* getBot() const
 	{
 		return new T;
 	}

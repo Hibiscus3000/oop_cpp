@@ -3,15 +3,21 @@
 unsigned View::selectNumberOfPlayers()
 {
 	unsigned numberOfPlayers;
+	if (prevMistake)
+		cout << "Number of players shouldn't be equal to zero!" << endl;
 	cout << "Please select number of players: ";
 	cin >> numberOfPlayers;
 	return numberOfPlayers;
 }
 
-unsigned View::selectWordLength()
+unsigned View::selectWordLength(unsigned minWordLength, unsigned maxWordLength)
 {
 	unsigned wordLength;
-	cout << "Please select word length: ";
+	if (prevMistake)
+		cout << "Inappropriate word length, please try again, remember that ";
+	else
+		cout << "Please select word length, ";
+	cout <<	"it should vary from " << minWordLength << " to " << maxWordLength << ": ";
 	cin >> wordLength;
 	return wordLength;
 }
@@ -37,7 +43,10 @@ string View::selectPlayerName(unsigned playerNumber)
 string View::selectSecretWord(const string& fromPlayerName, const string& forPlayerName, unsigned wordLength)
 {
 	string secretWord;
-	cout << fromPlayerName << ", please enter your " << wordLength << " symbols secret word for " << forPlayerName << ": ";
+	if (prevMistake)
+		cout << "Wrong attempt, " << fromPlayerName << ", please try again: ";
+	else
+		cout << fromPlayerName << ", please enter your " << wordLength << " symbols secret word for " << forPlayerName << ": ";
 	cin >> secretWord;
 	system("cls");
 	return secretWord;
@@ -46,7 +55,11 @@ string View::selectSecretWord(const string& fromPlayerName, const string& forPla
 string View::makeTurn(const string& playerName, unsigned wordLength)
 {
 	string tryWord;
-	cout << playerName << ", please make your turn, remember that length of the word should be " << wordLength << ": ";
+	if (prevMistake)
+		cout << "Wrong attempt, " << playerName << ", please try again, ";
+	else
+		cout << playerName << ", please make your turn, ";
+	cout << "remember that length of the word should be " << wordLength << ": ";
 	cin >> tryWord;
 	return tryWord;
 }
@@ -59,4 +72,12 @@ void View::showTurnResults(unsigned cows, unsigned bulls)
 void View::showVictoryMessage(const string& playerName, unsigned turnNumber)
 {
 	cout << playerName << ", you guessed your word in " << turnNumber << " turns! Congratulations!!!" << endl;
+}
+
+string View::playAgain()
+{
+	string answer;
+	cout << "Do you want to play again? ";
+	cin >> answer;
+	return answer;
 }

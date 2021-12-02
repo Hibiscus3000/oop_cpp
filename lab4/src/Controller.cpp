@@ -1,52 +1,72 @@
 #include "Controller.h"
 
-void Controller::setWordLength()
+void Controller::setWordLength(unsigned minWordLength, unsigned maxWordLength)
 {
-	unsigned wordLength = view.selectWordLength();
-	if (!wordLength)
-		throw inappropriateLength(wordLength);
-	model.wordLength = wordLength;
+	model.wordLength = view.selectWordLength(minWordLength, maxWordLength);
+	while ((model.wordLength < minWordLength) || (model.wordLength > maxWordLength))
+	{
+		view.prevMistake = true;
+		model.wordLength = view.selectWordLength(minWordLength, maxWordLength);
+	}
+	view.prevMistake = false;
 }
 
 void Controller::setSecretWord(const string& fromPlayerName, Player& forPlayer)
 {
-	string secretWord = view.selectSecretWord(fromPlayerName, forPlayer.name, model.wordLength);
-	if (secretWord.length() != model.wordLength)
-		throw inappropriateWord("secret word", secretWord, model.wordLength);
-	forPlayer.secretWord = secretWord;
+	forPlayer.secretWord = view.selectSecretWord(fromPlayerName, forPlayer.name, model.wordLength);
+	while (forPlayer.secretWord.length() != model.wordLength)
+	{
+		view.prevMistake = true;
+		forPlayer.secretWord = view.selectSecretWord(fromPlayerName, forPlayer.name, model.wordLength);
+	}
+	view.prevMistake = false;
 }
 
 void Controller::setTryWord(const string& playerName)
 {
-	string tryWord = view.makeTurn(playerName, model.wordLength);
-	if (tryWord.length() != model.wordLength)
-		throw inappropriateWord("try word", tryWord, model.wordLength);
-	model.tryWord = tryWord;
+	model.tryWord = view.makeTurn(playerName,model.wordLength);
+	while (model.tryWord.length() != model.wordLength)
+	{
+		view.prevMistake = true;
+		model.tryWord = view.makeTurn(playerName, model.wordLength);
+	}
+	view.prevMistake = false;
 }
 
 void Controller::play()
 {
 	unsigned numberOfPlayers = view.selectNumberOfPlayers();
-	if (!numberOfPlayers)
-		throw MyException("Number of players shouldn't be equal to zero");
+	while (!numberOfPlayers)
+	{
+		view.prevMistake = true;
+		numberOfPlayers = view.selectNumberOfPlayers();
+	}
 	Model model(numberOfPlayers);
 	this->model = model;
-	setWordLength();
-	model.players[0]->name = view.selectPlayerName(1);
 	if (numberOfPlayers != 1)
 		pvp(numberOfPlayers);
-	//if (!gameMode.compare("pvc"));
+	else pvc();
 }
 
 void Controller::pvc()
 {
-
+	model.players[0]->name = view.selectPlayerName(1);
+	setWordLength(0, INT_MAX);
+	model.players[0]->secretWord = BotFactory::getInstance().getBot(view.selectDifficulty())->makeSecretWord(model.wordLength);
+	while (!model.players[0]->victory)
+	{
+		setTryWord(model.players[0]->name);
+		model.makeTurn(*(model.players[0]));
+		if (!model.players[0]->victory)
+			view.showTurnResults(model.cows, model.bulls);
+	}
+	view.showVictoryMessage(model.players[0]->name, model.players[0]->turnNumber);
 }
 
 void Controller::pvp(unsigned numberOfPlayers)
 {
 	preGameSettings(numberOfPlayers);
-	unsigned i,numberOfVictories = 0;
+	unsigned i, numberOfVictories = 0;
 	while (numberOfVictories != numberOfPlayers)
 	{
 		for (i = 0; i < numberOfPlayers; ++i)
@@ -68,11 +88,18 @@ void Controller::pvp(unsigned numberOfPlayers)
 
 void Controller::preGameSettings(unsigned numberOfPlayers)
 {
+	setWordLength(0,INT_MAX);
 	unsigned i;
-	for (i = 1; i < numberOfPlayers; ++i)
+	for (i = 0; i < numberOfPlayers; ++i)
 		model.players[i]->name = view.selectPlayerName(i + 1);
 	for (i = 1; i < numberOfPlayers; ++i)
 		setSecretWord(model.players[i - 1]->name, *model.players[i]);
 	setSecretWord(model.players[i - 1]->name, *model.players[0]);
 }
 
+void Controller::start()
+{
+	play();
+	while (!view.playAgain().compare("yes"))
+		play();
+}
