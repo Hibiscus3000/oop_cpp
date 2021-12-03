@@ -18,8 +18,8 @@ class Controller
 	void pvp(int numberOfPlayers);
 	void preGameSettings(int numberOfPlayers);
 	void play();
-	void qCheck(string str);
-	bool giveUpCheck(string str);
+	void qCheck(const string& str);
+	void mediumBotCheck(const string& difficulty);
 public:
 	void start();
 };

@@ -9,7 +9,8 @@ class Player
 {
 public:
 	string name, secretWord;
-	bool victoryOrLoss = false;
+	bool victory = false;
+	bool loss = false;
 	int turnNumber = 0;
 	int number;
 };

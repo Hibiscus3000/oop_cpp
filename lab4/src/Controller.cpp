@@ -28,7 +28,7 @@ void Controller::setTryWord(const Player& player)
 {
 	model.tryWord = view.makeTurn(player.name, player.number, model.wordLength);
 	qCheck(model.tryWord);
-	while ((model.tryWord.length() != model.wordLength) && (!giveUpCheck(model.tryWord)))
+	while ((model.tryWord.length() != model.wordLength) && (!model.giveUpCheck()))
 	{
 		view.prevMistake = true;
 		model.tryWord = view.makeTurn(player.name, player.number, model.wordLength);
@@ -59,25 +59,21 @@ void Controller::pvc()
 	qCheck(model.players[0]->name);
 	string difficulty = view.selectDifficulty();
 	qCheck(difficulty);
-	if (!difficulty.compare("medium"))
-	{
-		model.minWordLength = MIN_WORD_LENGTH;
-		model.maxWordLength = MAX_WORD_LENGTH;
-	}
+	mediumBotCheck(difficulty);
 	Bot* bot = BotFactory::getInstance().getBot(difficulty);
 	setWordLength();
 	model.players[0]->secretWord = bot->makeSecretWord(model.wordLength);
-	while (!model.players[0]->victoryOrLoss)
+	while ((!model.players[0]->victory) && (model.players[0]->loss))
 	{
 		setTryWord(*model.players[0]);
-		if (giveUpCheck(model.tryWord))
-		{
-			view.showLossMessage(model.players[0]->name, model.players[0]->number, model.players[0]->secretWord);
-			return;
-		}
 		model.makeTurn(*model.players[0]);
-		if (!model.players[0]->victoryOrLoss)
-			view.showTurnResults(model.cows, model.bulls);
+		if (model.players[0]->victory)
+			view.showVictoryMessage(model.players[0]->name, model.players[0]->number, model.players[0]->turnNumber);
+		else
+			if (model.players[0]->loss)
+				view.showLossMessage(model.players[0]->name, model.players[0]->number, model.players[0]->secretWord);
+			else
+				view.showTurnResults(model.cows, model.bulls);
 	}
 	view.showVictoryMessage(model.players[0]->name, model.players[0]->number, model.players[0]->turnNumber);
 }
@@ -90,21 +86,17 @@ void Controller::pvp(int numberOfPlayers)
 	{
 		for (i = 0; i < numberOfPlayers; ++i)
 		{
-			if (model.players[i]->victoryOrLoss)
+			if ((model.players[i]->victory) || (model.players[i]->loss))
 				continue;
 			setTryWord(*model.players[i]);
-			if (giveUpCheck(model.tryWord))
-			{
-				view.showLossMessage(model.players[i]->name, model.players[i]->number, model.players[i]->secretWord);
-				model.players[i]->victoryOrLoss = true;
-				++numberOfVictoriesOrLosses;
-				continue;
-			}
 			model.makeTurn(*model.players[i]);
-			if (model.players[i]->victoryOrLoss)
+			if ((model.players[i]->victory) || (model.players[i]->loss))
 			{
 				++numberOfVictoriesOrLosses;
-				view.showVictoryMessage(model.players[i]->name, model.players[i]->number, model.players[i]->turnNumber);
+				if (model.players[i]->victory)
+					view.showVictoryMessage(model.players[i]->name, model.players[i]->number, model.players[i]->turnNumber);
+				if (model.players[i]->loss)
+					view.showLossMessage(model.players[i]->name, model.players[i]->number, model.players[i]->secretWord);
 			}
 			else
 				view.showTurnResults(model.cows, model.bulls);
@@ -126,17 +118,19 @@ void Controller::preGameSettings(int numberOfPlayers)
 	setSecretWord(*model.players[i - 1], *model.players[0]);
 }
 
-void Controller::qCheck(string str)
+void Controller::qCheck(const string& str)
 {
 	if (!str.compare("q"))
 		throw MyException("");
 }
 
-bool Controller::giveUpCheck(string str)
+void Controller::mediumBotCheck(const string& difficulty)
 {
-	if (!str.compare("giveup"))
-		return true;
-	return false;
+	if (!difficulty.compare("medium"))
+	{
+		model.minWordLength = MIN_WORD_LENGTH;
+		model.maxWordLength = MAX_WORD_LENGTH;
+	}
 }
 
 void Controller::start()

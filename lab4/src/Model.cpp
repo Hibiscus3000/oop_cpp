@@ -20,10 +20,22 @@ bool Model::checkLength()
 
 void Model::makeTurn(Player& player)
 {
+	if (giveUpCheck())
+	{
+		player.loss = true;
+		return;
+	}
 	++(player.turnNumber);
 	countBullsAndCowsNumber(player.secretWord);
 	if (this->bulls == wordLength)
-		player.victoryOrLoss = true;
+		player.victory= true;
+}
+
+bool Model::giveUpCheck()
+{
+	if (!tryWord.compare("giveup"))
+		return true;
+	return false;
 }
 
 void Model::searchForBulls(int& wordLengthCp, string& secretWord, string& secretWordCp)

@@ -15,6 +15,7 @@ public:
 	Model() = default;
 	Model(int numberOfPlayers);
 	bool checkLength();
+	bool giveUpCheck();
 private:
 	void searchForCows(int& wordLengthCp, string& secretWordCp);
 	void searchForBulls(int& wordLengthCp, string& secretWordN, string& secretWordCp);
