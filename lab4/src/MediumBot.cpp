@@ -8,9 +8,11 @@ string MediumBot::makeSecretWord(unsigned wordLength)
 	fileName.insert(5, cwordLength);
 	ifstream words(fileName);
 	if (!words)
-		throw MediumBotException(fileName);
+		throw WrongFile(fileName);
 	unsigned i,wordNumber = rand() % 20;
 	for (i = 0; i < wordNumber; ++i)
 		getline(words, word);
+	if (word.length() != wordLength)
+		throw WrongWordLength(wordLength, word.length());
 	return word;
 }

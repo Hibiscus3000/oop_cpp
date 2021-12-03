@@ -51,8 +51,12 @@ void Controller::play()
 void Controller::pvc()
 {
 	model.players[0]->name = view.selectPlayerName(1);
-	setWordLength(0, INT_MAX);
-	model.players[0]->secretWord = BotFactory::getInstance().getBot(view.selectDifficulty())->makeSecretWord(model.wordLength);
+	string difficulty = view.selectDifficulty();
+	if (!difficulty.compare("medium"))
+		setWordLength(MIN_WORD_LENGTH, MAX_WORD_LENGNTH);
+	else
+		setWordLength(1, INT_MAX);
+	model.players[0]->secretWord = BotFactory::getInstance().getBot(difficulty)->makeSecretWord(model.wordLength);
 	while (!model.players[0]->victory)
 	{
 		setTryWord(model.players[0]->name);

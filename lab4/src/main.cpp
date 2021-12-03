@@ -12,8 +12,8 @@ int main()
 	try
 	{
 		BotCreator<EasyBot> easyBot("easy");
-		BotCreator<EasyBot> mediumBot("medium");
-		BotCreator<EasyBot> hardBot("hard");
+		BotCreator<MediumBot> mediumBot("medium");
+		BotCreator<HardBot> hardBot("hard");
 		Controller controller;
 		controller.start();
 	}

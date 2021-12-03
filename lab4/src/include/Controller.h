@@ -1,5 +1,7 @@
 #ifndef _CONTROLLER_
 #define _CONTROLLER_
+#define MIN_WORD_LENGTH 3
+#define MAX_WORD_LENGNTH 6 
 
 #include "Model.h"
 #include "View.h"

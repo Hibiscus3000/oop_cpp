@@ -14,7 +14,7 @@ unsigned View::selectWordLength(unsigned minWordLength, unsigned maxWordLength)
 {
 	unsigned wordLength;
 	if (prevMistake)
-		cout << "Inappropriate word length, please try again, remember that ";
+		cout << "Inappropriate word length, please remember that ";
 	else
 		cout << "Please select word length, ";
 	cout <<	"it should vary from " << minWordLength << " to " << maxWordLength << ": ";
@@ -25,7 +25,7 @@ unsigned View::selectWordLength(unsigned minWordLength, unsigned maxWordLength)
 string View::selectDifficulty()
 {
 	string difficulty;
-	cout << "Please select difficulty: easy, medium, hard: ";
+	cout << "Please select difficulty: easy, medium or hard: ";
 	cin >> difficulty;
 	system("cls");
 	return difficulty;
