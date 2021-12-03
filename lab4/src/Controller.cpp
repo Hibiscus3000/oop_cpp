@@ -63,17 +63,18 @@ void Controller::pvc()
 	Bot* bot = BotFactory::getInstance().getBot(difficulty);
 	setWordLength();
 	model.players[0]->secretWord = bot->makeSecretWord(model.wordLength);
-	while ((!model.players[0]->victory) && (model.players[0]->loss))
+	while ((!model.players[0]->victory) && (!model.players[0]->loss))
 	{
 		setTryWord(*model.players[0]);
 		model.makeTurn(*model.players[0]);
-		if (model.players[0]->victory)
-			view.showVictoryMessage(model.players[0]->name, model.players[0]->number, model.players[0]->turnNumber);
+		if (model.players[0]->loss)
+		{
+			view.showLossMessage(model.players[0]->name, model.players[0]->number, model.players[0]->secretWord);
+			return;
+		}
 		else
-			if (model.players[0]->loss)
-				view.showLossMessage(model.players[0]->name, model.players[0]->number, model.players[0]->secretWord);
-			else
-				view.showTurnResults(model.cows, model.bulls);
+			if (!model.players[0]->victory)
+			view.showTurnResults(model.cows, model.bulls);
 	}
 	view.showVictoryMessage(model.players[0]->name, model.players[0]->number, model.players[0]->turnNumber);
 }
