@@ -6,6 +6,7 @@ Model::Model(unsigned numberOfPlayers)
 	for (i = 0; i < numberOfPlayers; ++i)
 	{
 		shared_ptr<Player> player(new Player);
+		player->number = i + 1;
 		players[i] = player; 
 	}
 }

@@ -11,24 +11,24 @@ void Controller::setWordLength(unsigned minWordLength, unsigned maxWordLength)
 	view.prevMistake = false;
 }
 
-void Controller::setSecretWord(const string& fromPlayerName, Player& forPlayer)
+void Controller::setSecretWord(const Player& fromPlayer, Player& forPlayer)
 {
-	forPlayer.secretWord = view.selectSecretWord(fromPlayerName, forPlayer.name, model.wordLength);
+	forPlayer.secretWord = view.selectSecretWord(fromPlayer.name,fromPlayer.number, forPlayer.name, forPlayer.number, model.wordLength);
 	while (forPlayer.secretWord.length() != model.wordLength)
 	{
 		view.prevMistake = true;
-		forPlayer.secretWord = view.selectSecretWord(fromPlayerName, forPlayer.name, model.wordLength);
+		forPlayer.secretWord = view.selectSecretWord(fromPlayer.name, fromPlayer.number, forPlayer.name, forPlayer.number, model.wordLength);
 	}
 	view.prevMistake = false;
 }
 
-void Controller::setTryWord(const string& playerName)
+void Controller::setTryWord(const Player& player)
 {
-	model.tryWord = view.makeTurn(playerName,model.wordLength);
+	model.tryWord = view.makeTurn(player.name, player.number, model.wordLength);
 	while (model.tryWord.length() != model.wordLength)
 	{
 		view.prevMistake = true;
-		model.tryWord = view.makeTurn(playerName, model.wordLength);
+		model.tryWord = view.makeTurn(player.name,player.number, model.wordLength);
 	}
 	view.prevMistake = false;
 }
@@ -59,12 +59,12 @@ void Controller::pvc()
 	model.players[0]->secretWord = BotFactory::getInstance().getBot(difficulty)->makeSecretWord(model.wordLength);
 	while (!model.players[0]->victory)
 	{
-		setTryWord(model.players[0]->name);
-		model.makeTurn(*(model.players[0]));
+		setTryWord(*model.players[0]);
+		model.makeTurn(*model.players[0]);
 		if (!model.players[0]->victory)
 			view.showTurnResults(model.cows, model.bulls);
 	}
-	view.showVictoryMessage(model.players[0]->name, model.players[0]->turnNumber);
+	view.showVictoryMessage(model.players[0]->name, model.players[0]->number, model.players[0]->turnNumber);
 }
 
 void Controller::pvp(unsigned numberOfPlayers)
@@ -77,12 +77,12 @@ void Controller::pvp(unsigned numberOfPlayers)
 		{
 			if (model.players[i]->victory)
 				continue;
-			setTryWord(model.players[i]->name);
-			model.makeTurn(*(model.players[i]));
+			setTryWord(*model.players[i]);
+			model.makeTurn(*model.players[i]);
 			if (model.players[i]->victory)
 			{
 				++numberOfVictories;
-				view.showVictoryMessage(model.players[i]->name, model.players[i]->turnNumber);
+				view.showVictoryMessage(model.players[i]->name,model.players[i]->number, model.players[i]->turnNumber);
 			}
 			else
 				view.showTurnResults(model.cows, model.bulls);
@@ -97,8 +97,8 @@ void Controller::preGameSettings(unsigned numberOfPlayers)
 	for (i = 0; i < numberOfPlayers; ++i)
 		model.players[i]->name = view.selectPlayerName(i + 1);
 	for (i = 1; i < numberOfPlayers; ++i)
-		setSecretWord(model.players[i - 1]->name, *model.players[i]);
-	setSecretWord(model.players[i - 1]->name, *model.players[0]);
+		setSecretWord(*model.players[i - 1], *model.players[i]);
+	setSecretWord(*model.players[i - 1], *model.players[0]);
 }
 
 void Controller::start()

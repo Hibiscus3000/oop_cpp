@@ -11,6 +11,7 @@ public:
 	string name, secretWord;
 	bool victory = false;
 	unsigned turnNumber = 0;
+	unsigned number;
 };
 
 #endif

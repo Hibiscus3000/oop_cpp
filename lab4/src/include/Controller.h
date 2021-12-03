@@ -12,8 +12,8 @@ class Controller
 	View view;
 	Model model;
 	void setWordLength(unsigned minWordLength, unsigned maxWordLength);
-	void setSecretWord(const string& fromPlayerName, Player& forPlayer);
-	void setTryWord(const string& playerName);
+	void setSecretWord(const Player& fromPlayer, Player& forPlayer);
+	void setTryWord(const Player& player);
 	void pvc();
 	void pvp(unsigned numberOfPlayers);
 	void preGameSettings(unsigned numberOfPlayers);
