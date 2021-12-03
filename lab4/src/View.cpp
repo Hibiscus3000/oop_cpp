@@ -11,25 +11,25 @@ void View::setColorWhite()
 	SetConsoleTextAttribute(hConsole, 15);
 }
 
-void View::setColor(unsigned color)
+void View::setColor(int color)
 {
 	color = color % 11 + 4;
 	SetConsoleTextAttribute(hConsole, color);
 }
 
-unsigned View::selectNumberOfPlayers()
+int View::selectNumberOfPlayers()
 {
-	unsigned numberOfPlayers;
+	int numberOfPlayers;
 	if (prevMistake)
-		cout << "Number of players shouldn't be equal to zero!" << endl;
+		cout << "Number of players shouldn't be zero or less" << endl;
 	cout << "Please select number of players: ";
 	cin >> numberOfPlayers;
 	return numberOfPlayers;
 }
 
-unsigned View::selectWordLength(unsigned minWordLength, unsigned maxWordLength)
+int View::selectWordLength(int minWordLength, int maxWordLength)
 {
-	unsigned wordLength;
+	int wordLength;
 	if (prevMistake)
 		cout << "Inappropriate word length, please remember that ";
 	else
@@ -44,13 +44,13 @@ string View::selectDifficulty()
 	string difficulty;
 	cout << "Please select difficulty: easy, medium or hard: ";
 	cin >> difficulty;
-	system("cls");
 	return difficulty;
 }
 
-string View::selectPlayerName(unsigned playerNumber)
+string View::selectPlayerName(int playerNumber)
 {
 	string name; 
+	system("cls");
 	setColor(playerNumber);
 	cout << "Player" << playerNumber;
 	setColorWhite();
@@ -62,16 +62,17 @@ string View::selectPlayerName(unsigned playerNumber)
 	return name;
 }
 
-string View::selectSecretWord(const string& fromPlayerName,unsigned forPlayerNumber, const string& forPlayerName,unsigned fromPlayerNumber, unsigned wordLength)
+string View::selectSecretWord(const string& fromPlayerName,int forPlayerNumber, const string& forPlayerName,int fromPlayerNumber, int wordLength)
 {
 	string secretWord;
+	system("cls");
 	if (prevMistake)
 	{
 		cout << "Wrong attempt, ";
 		setColor(fromPlayerNumber);
 		cout << fromPlayerName;
 		setColorWhite();
-		cout << ", please try again: ";
+		cout << ", please try again, remember that length of the word should be " << wordLength << ": ";
 	}
 	else
 	{
@@ -91,7 +92,7 @@ string View::selectSecretWord(const string& fromPlayerName,unsigned forPlayerNum
 	return secretWord;
 }
 
-string View::makeTurn(const string& playerName, unsigned playerNumber, unsigned wordLength)
+string View::makeTurn(const string& playerName, int playerNumber, int wordLength)
 {
 	string tryWord;
 	if (prevMistake)
@@ -116,17 +117,29 @@ string View::makeTurn(const string& playerName, unsigned playerNumber, unsigned 
 	return tryWord;
 }
 
-void View::showTurnResults(unsigned cows, unsigned bulls)
+void View::showTurnResults(int cows, int bulls)
 {
 	cout << "Bulls: " << bulls << endl << "Cows: " << cows << endl;
 }
 
-void View::showVictoryMessage(const string& playerName, unsigned playerNumber, unsigned turnNumber)
+void View::showVictoryMessage(const string& playerName, int playerNumber, int turnNumber)
 {
 	setColor(playerNumber);
 	cout << playerName; 
 	setColorWhite();
 	cout << ", you guessed your word in " << turnNumber << " turns! Congratulations!!!" << endl;
+}
+
+void View::showLossMessage(const string& playerName,  int playerNumber, const string& secretWord)
+{
+	setColor(playerNumber);
+	cout << playerName;
+	setColorWhite();
+	cout << ", you lost :(, ";
+	setColor(playerNumber);
+	cout << secretWord;
+	setColorWhite();
+	cout << " was your secret word"<< endl;
 }
 
 string View::playAgain()

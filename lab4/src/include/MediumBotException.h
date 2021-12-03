@@ -19,9 +19,9 @@ public:
 
 class WrongWordLength : public MyException
 {
-	unsigned expWordLength, givenWordLength;
+	int expWordLength, givenWordLength;
 public:
-	WrongWordLength(unsigned expWordLength, unsigned givenWordLength) : expWordLength(expWordLength), givenWordLength(givenWordLength)
+	WrongWordLength(int expWordLength, int givenWordLength) : expWordLength(expWordLength), givenWordLength(givenWordLength)
 	{
 
 	}

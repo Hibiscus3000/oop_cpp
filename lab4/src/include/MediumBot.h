@@ -13,7 +13,7 @@
 class MediumBot : public Bot
 {
 public:
-	string makeSecretWord(unsigned wordLength);
+	string makeSecretWord(int wordLength);
 };
 
 #endif

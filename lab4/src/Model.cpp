@@ -1,8 +1,8 @@
 #include "Model.h"
 
-Model::Model(unsigned numberOfPlayers)
+Model::Model(int numberOfPlayers)
 {
-	unsigned i;
+	int i;
 	for (i = 0; i < numberOfPlayers; ++i)
 	{
 		shared_ptr<Player> player(new Player);
@@ -11,18 +11,25 @@ Model::Model(unsigned numberOfPlayers)
 	}
 }
 
+bool Model::checkLength()
+{
+	if ((wordLength < minWordLength) || (wordLength > maxWordLength))
+		return false;
+	return true;
+}
+
 void Model::makeTurn(Player& player)
 {
 	++(player.turnNumber);
 	countBullsAndCowsNumber(player.secretWord);
 	if (this->bulls == wordLength)
-		player.victory = true;
+		player.victoryOrLoss = true;
 }
 
-void Model::searchForBulls(unsigned& wordLengthCp, string& secretWord, string& secretWordCp)
+void Model::searchForBulls(int& wordLengthCp, string& secretWord, string& secretWordCp)
 {
 	bulls = 0;
-	unsigned i;
+	int i;
 	string tryWordCp = tryWord;
 	for (i = 0; i < wordLength; ++i)
 		if (secretWord[i] == tryWord[i])
@@ -35,10 +42,10 @@ void Model::searchForBulls(unsigned& wordLengthCp, string& secretWord, string& s
 	tryWord = tryWordCp;
 }
 
-void Model::searchForCows(unsigned& wordLengthCp, string& secretWordCp)
+void Model::searchForCows(int& wordLengthCp, string& secretWordCp)
 {
 	cows = 0;
-	unsigned i, j, lengthWithoutBulls = wordLengthCp;
+	int i, j, lengthWithoutBulls = wordLengthCp;
 	for (i = 0; i < lengthWithoutBulls; ++i)
 		for (j = 0; j < wordLengthCp; ++j)
 			if (secretWordCp[j] == tryWord[i])
@@ -53,7 +60,7 @@ void Model::searchForCows(unsigned& wordLengthCp, string& secretWordCp)
 void Model::countBullsAndCowsNumber(string& secretWord)
 {
 	string secretWordCp = secretWord;
-	unsigned wordLengthCp = wordLength;
+	int wordLengthCp = wordLength;
 	this->searchForBulls(wordLengthCp, secretWord, secretWordCp);
 	this->searchForCows(wordLengthCp, secretWordCp);
 }

@@ -9,9 +9,9 @@ class Player
 {
 public:
 	string name, secretWord;
-	bool victory = false;
-	unsigned turnNumber = 0;
-	unsigned number;
+	bool victoryOrLoss = false;
+	int turnNumber = 0;
+	int number;
 };
 
 #endif

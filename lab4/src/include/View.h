@@ -13,16 +13,17 @@ class View
 public:
 	View();
 	void setColorWhite();
-	void setColor(unsigned color);
+	void setColor(int color);
 	bool prevMistake = false;
-	unsigned selectNumberOfPlayers();
-	unsigned selectWordLength(unsigned minWordLength, unsigned maxWordLength);
+	int selectNumberOfPlayers();
+	int selectWordLength(int minWordLength, int maxWordLength);
 	string selectDifficulty();
-	string selectPlayerName(unsigned playerNumber);
-	string selectSecretWord(const string& fromPlayerName, unsigned forPlayerNumber, const string& forPlayerName, unsigned fromPlayerNumber, unsigned wordLength);
-	string makeTurn(const string& playerName, unsigned playerNumber, unsigned wordLength);
-	void showTurnResults(unsigned cows, unsigned bulls);
-	void showVictoryMessage(const string& playerName,unsigned playerNumber, unsigned turnNumber);
+	string selectPlayerName(int playerNumber);
+	string selectSecretWord(const string& fromPlayerName, int forPlayerNumber, const string& forPlayerName, int fromPlayerNumber, int wordLength);
+	string makeTurn(const string& playerName, int playerNumber, int wordLength);
+	void showTurnResults(int cows, int bulls);
+	void showVictoryMessage(const string& playerName,int playerNumber, int turnNumber);
+	void showLossMessage(const string& playerName, int playerNumber, const string& secretWord);
 	string playAgain();
 };
 

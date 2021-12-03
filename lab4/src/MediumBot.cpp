@@ -1,6 +1,6 @@
 #include "MediumBot.h"
 
-string MediumBot::makeSecretWord(unsigned wordLength)
+string MediumBot::makeSecretWord(int wordLength)
 {
 	char cwordLength[MAX_WORD_LENGTH_LENGTH];
 	itoa(wordLength, cwordLength, 10);
@@ -9,7 +9,7 @@ string MediumBot::makeSecretWord(unsigned wordLength)
 	ifstream words(fileName);
 	if (!words)
 		throw WrongFile(fileName);
-	unsigned i,wordNumber = rand() % 20;
+	int i,wordNumber = rand() % 20;
 	for (i = 0; i < wordNumber; ++i)
 		getline(words, word);
 	if (word.length() != wordLength)

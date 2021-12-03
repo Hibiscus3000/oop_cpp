@@ -8,15 +8,16 @@
 class Model
 {
 public:
-	unsigned wordLength, cows, bulls;
+	int minWordLength = 2, maxWordLength = INT_MAX, wordLength, cows, bulls;
 	map<unsigned,shared_ptr<Player>> players;
 	string tryWord;
 	void makeTurn(Player& player);
 	Model() = default;
-	Model(unsigned numberOfPlayers);
+	Model(int numberOfPlayers);
+	bool checkLength();
 private:
-	void searchForCows(unsigned& wordLengthCp, string& secretWordCp);
-	void searchForBulls(unsigned& wordLengthCp, string& secretWordN, string& secretWordCp);
+	void searchForCows(int& wordLengthCp, string& secretWordCp);
+	void searchForBulls(int& wordLengthCp, string& secretWordN, string& secretWordCp);
 	void countBullsAndCowsNumber(string& secretWordN);
 };
 

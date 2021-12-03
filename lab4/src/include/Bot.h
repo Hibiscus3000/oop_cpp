@@ -8,7 +8,7 @@ using namespace std;
 class Bot
 {
 public:
-	virtual string makeSecretWord(unsigned wordLength) = 0;
+	virtual string makeSecretWord(int wordLength) = 0;
 };
 
 #endif
