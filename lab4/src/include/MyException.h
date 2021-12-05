@@ -6,7 +6,7 @@
 
 using namespace std;
 
-class MyException
+class MyException : public exception
 {
 protected:
 	string error;

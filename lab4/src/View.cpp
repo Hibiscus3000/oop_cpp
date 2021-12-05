@@ -54,7 +54,7 @@ string View::selectPlayerName(int playerNumber)
 	setColor(playerNumber);
 	cout << "Player" << playerNumber;
 	setColorWhite();
-	cout << " please enter your name: ";
+	cout << ", please enter your name: ";
 	setColor(playerNumber);
 	cin >> name;
 	setColorWhite();

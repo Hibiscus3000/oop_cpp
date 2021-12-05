@@ -74,7 +74,7 @@ void Controller::pvc()
 		}
 		else
 			if (!model.players[0]->victory)
-			view.showTurnResults(model.cows, model.bulls);
+				view.showTurnResults(model.cows, model.bulls);
 	}
 	view.showVictoryMessage(model.players[0]->name, model.players[0]->number, model.players[0]->turnNumber);
 }
