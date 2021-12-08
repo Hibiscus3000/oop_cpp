@@ -12,14 +12,14 @@ class Controller
 	View view;
 	Model model;
 	void setWordLength();
-	void setSecretWord(const Player& fromPlayer, Player& forPlayer);
-	void setTryWord(const Player& player);
-	void pvc();
-	void pvp(int numberOfPlayers);
+	void setSecretWord(int fromPlayerNumber, int forPlayerNumber);
+	void setTryWord(int playerNumber);
 	void preGameSettings(int numberOfPlayers);
+	void setPlayersName(int numberOfPlayers);
 	void play();
-	void qCheck(const string& str);
+	void selectDifficulty();
 	void mediumBotCheck(const string& difficulty);
+	void makeTurns(int numberOfPlayers);
 public:
 	void start();
 };

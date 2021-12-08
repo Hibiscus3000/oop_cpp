@@ -1,6 +1,6 @@
 #include "Model.h"
 
-Model::Model(int numberOfPlayers)
+Model::Model(int numberOfPlayers) : numberOfPlayers(numberOfPlayers)
 {
 	int i;
 	for (i = 0; i < numberOfPlayers; ++i)
@@ -18,24 +18,22 @@ bool Model::checkLength()
 	return true;
 }
 
-void Model::makeTurn(Player& player)
+void Model::countTurnResults(int playerNumber)
 {
-	if (giveUpCheck())
-	{
-		player.loss = true;
-		return;
-	}
-	++(player.turnNumber);
-	countBullsAndCowsNumber(player.secretWord);
+	checkPlayerNumber(playerNumber);
+	++(players[playerNumber]->turnNumber);
+	countBullsAndCowsNumber(players[playerNumber]->secretWord);
 	if (this->bulls == wordLength)
-		player.victory= true;
+		players[playerNumber]->victory= true;
 }
 
-bool Model::giveUpCheck()
+bool Model::giveUpCheck(int playerNumber, string Word)
 {
-	if (!tryWord.compare("giveup"))
-		return true;
-	return false;
+	checkPlayerNumber(playerNumber);
+	if (Word.compare("giveup"))
+		return false;
+	players[playerNumber]->loss = true;
+	return true;
 }
 
 void Model::searchForBulls(int& wordLengthCp, string& secretWord, string& secretWordCp)
@@ -75,4 +73,117 @@ void Model::countBullsAndCowsNumber(string& secretWord)
 	int wordLengthCp = wordLength;
 	this->searchForBulls(wordLengthCp, secretWord, secretWordCp);
 	this->searchForCows(wordLengthCp, secretWordCp);
+}
+
+void Model::checkPlayerNumber(int playerNumber)
+{
+	if ((playerNumber < 0) || (playerNumber >= numberOfPlayers))
+		throw ModelException(numberOfPlayers, playerNumber);
+}
+
+int Model::getCows()
+{
+	return cows;
+}
+
+int Model::getBulls()
+{
+	return bulls;
+}
+
+int Model::getWordLength()
+{
+	return wordLength;
+}
+
+int Model::getMinWordLength()
+{
+	return minWordLength;
+}
+
+int Model::getMaxWordLength()
+{
+	return maxWordLength;
+}
+
+string Model::getTryWord()
+{
+	return tryWord;
+}
+
+string Model::getSecretWord(int playerNumber)
+{
+	checkPlayerNumber(playerNumber);
+	return players[playerNumber]->secretWord;
+}
+
+string Model::getPlayerName(int playerNumber)
+{
+	checkPlayerNumber(playerNumber);
+	return players[playerNumber]->name;
+}
+
+int Model::getPlayerTurnNumber(int playerNumber)
+{
+	checkPlayerNumber(playerNumber);
+	return players[playerNumber]->turnNumber;
+}
+
+bool Model::getPlayerVictory(int playerNumber)
+{
+	checkPlayerNumber(playerNumber);
+	return players[playerNumber]->victory;
+}
+
+bool Model::getPlayerLoss(int playerNumber)
+{
+	checkPlayerNumber(playerNumber);
+	return players[playerNumber]->loss;
+}
+
+void Model::setPlayerName(int playerNumber, string playerName)
+{
+	checkPlayerNumber(playerNumber);
+	players[playerNumber]->name = playerName;
+}
+
+void Model::setMinWordLength(int minWordLength)
+{
+	this->minWordLength = minWordLength;
+}
+
+void Model::setMaxWordLength(int maxWordLength)
+{
+	this->maxWordLength = maxWordLength;
+}
+
+bool Model::setWordLength(int wordLength)
+{
+	if ((wordLength < minWordLength) || (wordLength > maxWordLength))
+		return false;
+	this->wordLength = wordLength;
+	return true;
+}
+
+bool Model::setTryWord(int playerNumber,string tryWord)
+{
+	checkPlayerNumber(playerNumber);
+	if (giveUpCheck(playerNumber, tryWord))
+	{
+		players[playerNumber]->loss = true;
+		return true;
+	}
+	if (wordLength != tryWord.length())
+		return false;
+	this->tryWord = tryWord;
+	return true;
+}
+
+bool Model::setSecretWord(int playerNumber, string secretWord)
+{
+	checkPlayerNumber(playerNumber);
+	if (wordLength != secretWord.length())
+		return false;
+	players[playerNumber]->secretWord = secretWord;
+	return true;
 }

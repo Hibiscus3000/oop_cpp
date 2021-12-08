@@ -44,6 +44,7 @@ string View::selectDifficulty()
 	string difficulty;
 	cout << "Please select difficulty: easy, medium or hard: ";
 	cin >> difficulty;
+	qCheck(difficulty);
 	return difficulty;
 }
 
@@ -57,6 +58,7 @@ string View::selectPlayerName(int playerNumber)
 	cout << ", please enter your name: ";
 	setColor(playerNumber);
 	cin >> name;
+	qCheck(name);
 	setColorWhite();
 	system("cls");
 	return name;
@@ -87,6 +89,7 @@ string View::selectSecretWord(const string& fromPlayerName,int forPlayerNumber, 
 	}
 	setColor(fromPlayerNumber);
 	cin >> secretWord;
+	qCheck(secretWord);
 	setColorWhite();
 	system("cls");
 	return secretWord;
@@ -113,6 +116,7 @@ string View::makeTurn(const string& playerName, int playerNumber, int wordLength
 	cout << "remember that length of the word should be " << wordLength << ": ";
 	setColor(playerNumber);
 	cin >> tryWord;
+	qCheck(tryWord);
 	setColorWhite();
 	return tryWord;
 }
@@ -148,4 +152,10 @@ string View::playAgain()
 	cout << "Do you want to play again? ";
 	cin >> answer;
 	return answer;
+}
+
+void View::qCheck(const string& str)
+{
+	if (!str.compare("q"))
+		throw MyException("");
 }

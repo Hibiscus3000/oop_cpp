@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <windows.h>
+#include "MyException.h"
 
 using namespace std;
 
@@ -25,6 +26,7 @@ public:
 	void showVictoryMessage(const string& playerName,int playerNumber, int turnNumber);
 	void showLossMessage(const string& playerName, int playerNumber, const string& secretWord);
 	string playAgain();
+	void qCheck(const string& str);
 };
 
 #endif 
