@@ -15,7 +15,7 @@ struct ToTupleConverter
 	{
 		Head t;
 		if (str.empty())
-			throw NoExcpectedData(N, line, typeid(t).name());
+			throw NoExpectedData(N, line, typeid(t).name());
 		istringstream istrstream(str);
 		istrstream >> t;
 		istrstream >> str;
@@ -32,7 +32,7 @@ struct ToTupleConverter<N, string, Tail...>
 	static auto convert(string& str, const string& separators, const string& shielding, int line)
 	{
 		if (str.empty())
-			throw NoExcpectedData(N, line, "string");
+			throw NoExpectedData(N, line, "string");
 		int pos = str.find_first_of(separators);
 		while ((pos > 0) && (shielding.find_first_of(str[pos + 1]) != string::npos) && (str[pos - 1] == str[pos + 1]))
 		{
@@ -63,7 +63,7 @@ struct ToTupleConverter<N, Head>
 	{
 		Head t;
 		if (str.empty())
-			throw NoExcpectedData(N, line, typeid(t).name());
+			throw NoExpectedData(N, line, typeid(t).name());
 		istringstream istrstream(str);
 		istrstream >> t;
 		ExtraDataCheck(str, N + 1, line, separators);
@@ -94,10 +94,11 @@ class CSVParser
 	class Iterator : public iterator<input_iterator_tag, tuple<Args...>>
 	{
 		ifstream* file = NULL;
+		streampos offset;
 		string separators;
 		string shielding;
-		tuple<Args...>* currentTuple;
-		int line = 1;
+		tuple<Args...> currentTuple;
+		int line = 0;
 		bool endFileFlag = false;
 
 	public:
@@ -107,6 +108,7 @@ class CSVParser
 		Iterator(ifstream* file, const string& separators, const string& shielding, int skipLines)
 			: file(file), separators(separators), shielding(shielding)
 		{
+			file->seekg(0,ios::beg);
 			string str;
 			getline(*file, str);
 			int i;
@@ -119,51 +121,45 @@ class CSVParser
 				}
 				getline(*file, str);
 			}
-			currentTuple = &(ToTupleConverter<0, Args...>::convert(str, separators, shielding, line));
+			line = skipLines + 1;
+			currentTuple = ToTupleConverter<1, Args...>::convert(str, separators, shielding, line);
+			offset = file->tellg();
 		}
 
-		Iterator(const Iterator& it)
+		Iterator& operator++()
 		{
-			file = it.file;
-			separators = it.separators;
-			shielding = it.shielding;
-			line = it.line;
-			endFileFlag = it.endFileFlag;
-			currentTuple = it.currentTuple;
-		}
-
-		tuple<Args...>& operator++()
-		{
+			file->seekg(offset,ios::beg);
 			string str;
 			getline(*file, str);
 			++line;
 			if (file->eof())
-			{
 				endFileFlag = true;
-				currentTuple = NULL;
-			}
 			else
-				currentTuple = &(ToTupleConverter<0, Args...>::convert(str, separators, shielding, line));
-			return *currentTuple;
+				currentTuple = ToTupleConverter<0, Args...>::convert(str, separators, shielding, line);
+			offset = file->tellg();
+			return *this;
 		}
 
-		tuple<Args...>& operator++(int)
+		Iterator operator++(int)
 		{
-			tuple<Args...> previousTuple = *currentTuple;
+			file->seekg(offset, ios::beg);
+			Iterator previousIt = *this;
 			string str;
 			getline(*file, str);
 			++line;
-			if (file.eof())
+			if (file->eof())
 				endFileFlag = true;
-			currentTuple = &(ToTupleConverter<0, Args...>::convert(str, separators, shielding, line));
-			return previousTuple;
+			else
+				currentTuple = ToTupleConverter<0, Args...>::convert(str, separators, shielding, line);
+			offset = file->tellg();
+			return previousIt;
 		}
 
 		bool operator==(const Iterator& it) const
 		{
 			if ((this->endFileFlag) && (it.endFileFlag))
 				return true;
-			if ((this->endFileFlag) && (it.endFileFlag))
+			if (this->line == it.line)
 				return true;
 			return false;
 		}
@@ -173,14 +169,18 @@ class CSVParser
 			return !(*this == it);
 		}
 
-		tuple<Args...>& operator*() const
+		tuple<Args...>& operator*()
 		{
-			return *currentTuple;
+			if (endFileFlag)
+				throw exception("cannot dereference end CSV iterator");
+			return currentTuple;
 		}
 
 		tuple<Args...>* operator->() const
 		{
-			return currentTuple;
+			if (endFileFlag)
+				throw exception("cannot dereference end CSV iterator");
+			return &currentTuple;
 		}
 	};
 

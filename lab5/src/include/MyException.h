@@ -12,11 +12,11 @@ public:
 	virtual void errorReport() = 0;
 };
 
-class NoExcpectedData : public MyException
+class NoExpectedData : public MyException
 {
 	string ExpectedType;
 public:
-	NoExcpectedData(int column, int line, string ExpectedType) : 
+	NoExpectedData(int column, int line, string ExpectedType) : 
 		MyException(column,line),ExpectedType(ExpectedType)	{}
 	void errorReport()
 	{
