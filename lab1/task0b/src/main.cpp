@@ -1,11 +1,9 @@
 #include "util.h"
 
-int main(int argc, char** argv)
+int main()
 {
-	if (util::numOfArgCheck(argc))
-		return 1;
-	ifstream in(argv[1]);
-	ofstream out(argv[2]);
+	ifstream in("input.txt");
+	ofstream out("output.csv");
 	if ((!in) || (!out))
 	{
 		cout << "couldn't open file" << endl;
